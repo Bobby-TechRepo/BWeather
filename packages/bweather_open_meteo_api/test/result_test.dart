@@ -98,15 +98,15 @@ void main() {
             isA<Result>()
                 .having((c) => c.elevation, 'Elevation', 38)
                 .having((c) => c.timezone, 'Time Zone', "GMT")
-                .having((c) => c.utc_offset_seconds, 'UTC Offset Seconds', 0)
+                .having((c) => c.utcOffsetSeconds, 'UTC Offset Seconds', 0)
                 //.having((c) => c.timezone_abbreviation, 'Generated Time', 38)
-                .having((c) => c.daily_units, 'Daily Units',  DailyUnits.fromJson(json["daily_units"]))
+                .having((c) => c.dailyUnits, 'Daily Units',  DailyUnits.fromJson(json["daily_units"]))
                 .having((c) => c.daily, 'Daily', Daily.fromJson(json["daily"]))
-                .having((c) => c.hourly_units, 'Hourly Units', HourlyUnits.fromJson(json["hourly_units"]))
+                .having((c) => c.hourlyUnits, 'Hourly Units', HourlyUnits.fromJson(json["hourly_units"]))
                 .having((c) => c.hourly, 'Hourly', Hourly.fromJson(json["hourly"]))
                 .having((c) => c.current, 'Current', Current.fromJson(json["current"]))
-                .having((c) => c.current_units, 'Current Units',  CurrentUnits.fromJson(json["current_units"])));
+                .having((c) => c.currentUnits, 'Current Units',  CurrentUnits.fromJson(json["current_units"])));
       });
     });
   });
-}
+}

@@ -1,79 +1,91 @@
 import 'dart:developer';
 
-/*const Map<String, double> __timeZones = {
-    "ACDT": 10.5, "ACST": 9.5, "ADT": -3, "AEST": 10, "AEDT": 11, "AKDT": -8, "AKST": -9,"AST": -4, "AWST": 8,
-    "BST": 1, "CAT": 2, "CDT": -5, "CET": 1, "CEST": 2, "ChST": 10, "CST": -6, "EAT": 3, "EDT": -4, "EET": 2, "EEST": 3,
-    "EST": -5, "GMT": 0, "HDT": -9,"HST": -10, "HKT": 8, "IST": 5.5, "IDT": 3, "JST": 9, "KST": 9, "MDT": -6, "MST": -7,
-    "MSK": 3, "NDT": -2.5, "NST": -3.5, "NZST": 12, "NZDT": 13, "NDST": 13, "PDT": -7, "PST": -8, "SAST": 2, "SST": -11,
-    "WAT": 1, "WIB": 7, "WIT": 9, "WITA": 8, "WET": 0, "WEST": 1,
-};*/
-
-class JsonParser{
+/// Small helpers for reading loosely-typed JSON maps.
+///
+/// The `*OrNull` / `*List` helpers never throw: a missing or malformed value
+/// yields `null` / an empty list, so one bad field can't take down a whole
+/// persisted state.
+class JsonParser {
     static int parseInt(dynamic json, String key) {
-        return int.parse(json[key].toString());
+        return num.parse(json[key].toString()).toInt();
+    }
+
+    static int? parseIntOrNull(dynamic json, String key) {
+        final value = json[key];
+        if (value == null) return null;
+        return num.tryParse(value.toString())?.toInt();
     }
 
     static double parseDouble(dynamic json, String key) {
         return double.parse(json[key].toString());
     }
 
+    static double? parseDoubleOrNull(dynamic json, String key) {
+        final value = json[key];
+        if (value == null) return null;
+        return double.tryParse(value.toString());
+    }
+
     static String parseString(dynamic json, String key) {
         return json[key].toString();
     }
 
+    static String? parseStringOrNull(dynamic json, String key) {
+        final value = json[key];
+        if (value == null) return null;
+        final text = value.toString();
+        return text.isEmpty || text == "null" ? null : text;
+    }
+
     static bool parseBoolean(dynamic json, String key) {
-        return json[key];
+        final value = json[key];
+        if (value is bool) return value;
+        if (value is num) return value != 0;
+        return value.toString() == "true" || value.toString() == "1";
     }
 
     static DateTime parseDate(dynamic json, String key) {
         return DateTime.parse(json[key].toString());
     }
 
-    static List<double> parseDoubleList(dynamic json, String key) {
-        try{
-            if (json[key] is List) {
-                return (json[key] as List).map((objJson) =>  double.parse(objJson.toString())).toList();
-            }
-        }catch(error){
-            log("json parsing error encountered", error: error);
-        }
-        log("json value encountered: $json is not a List");
-        return [];
+    static DateTime? parseDateOrNull(dynamic json, String key) {
+        final value = json[key];
+        if (value == null) return null;
+        return DateTime.tryParse(value.toString());
     }
 
-    static List<int> parseIntList(dynamic json, String key) {
-        try{
-            if (json[key] is List) {
-                return (json[key] as List).map((objJson) =>  int.parse(objJson.toString())).toList();
-            }
-        }catch(error){
-            log("json parsing error encountered", error: error);
+    static List<T> _parseList<T>(dynamic json, String key, T Function(Object? element) convert) {
+        final value = json is Map ? json[key] : null;
+        if (value == null) {
+            return [];
         }
-        log("json value encountered: $json is not a List");
-        return [];
+        if (value is! List) {
+            log("json value for '$key' is not a List");
+            return [];
+        }
+        try {
+            return value.map(convert).toList();
+        } catch (error) {
+            log("json parsing error encountered for '$key'", error: error);
+            return [];
+        }
     }
 
-    static List<String> parseStringList(dynamic json, String key) {
-        try{
-            if (json[key] is List) {
-                return (json[key] as List).map((objJson) =>  objJson.toString()).toList();
-            }
-        }catch(error){
-            log("json parsing error encountered", error: error);
-        }
-        log("json value encountered: $json is not a List");
-        return [];
-    }
+    /// Open-Meteo returns `null` inside arrays for hours a model doesn't cover
+    /// (e.g. precipitation probability far in the future); those become 0.
+    static List<double> parseDoubleList(dynamic json, String key) =>
+        _parseList(json, key, (element) => element == null ? 0.0 : double.parse(element.toString()));
 
-    static List<DateTime> parseDateList(dynamic json, String key) {
-        try{
-            if (json[key] is List) {
-                return (json[key] as List).map((objJson) =>  DateTime.parse(objJson.toString())).toList();
-            }
-        }catch(error){
-            log("json parsing error encountered", error: error);
-        }
-        log("json value encountered: $json is not a List");
-        return [];
-    }
+    /// Like [parseDoubleList] but keeps gaps as `null` (for averages, where 0 would skew).
+    static List<double?> parseNullableDoubleList(dynamic json, String key) =>
+        _parseList(json, key, (element) => element == null ? null : double.tryParse(element.toString()));
+
+    static List<int> parseIntList(dynamic json, String key) =>
+        _parseList(json, key, (element) => element == null ? 0 : num.parse(element.toString()).toInt());
+
+    static List<String> parseStringList(dynamic json, String key) =>
+        _parseList(json, key, (element) => element.toString());
+
+    static List<DateTime> parseDateList(dynamic json, String key) =>
+        _parseList(json, key, (element) => DateTime.parse(element.toString()));
 }

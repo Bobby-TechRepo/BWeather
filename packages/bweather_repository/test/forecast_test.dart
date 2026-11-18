@@ -7,42 +7,42 @@ void main() {
   group('Forecast tests', () {
     test('Forecast should serialize to JSON correctly', () {
       final forecast = Forecast(
-        utc_offset_seconds: 3600,
+        utcOffsetSeconds: 3600,
         current: Current(
           time: DateTime.parse("2024-11-27T12:00:00Z"),
-          weather_code: 101,
+          weatherCode: 101,
           temperature: const Value(value: 20.0, unit: "C"),
-          apparent_temperature: const Value(value: 22.0, unit: "C"),
-          wind_speed: const Value(value: 5.0, unit: "m/s"),
-          wind_gusts: const Value(value: 8.0, unit: "m/s"),
-          wind_direction: const Value(value: 180, unit: "°"),
-          relative_humidity: const Value(value: 60, unit: "%"),
-          surface_pressure: const Value(value: 1015.0, unit: "hPa"),
+          apparentTemperature: const Value(value: 22.0, unit: "C"),
+          windSpeed: const Value(value: 5.0, unit: "m/s"),
+          windGusts: const Value(value: 8.0, unit: "m/s"),
+          windDirection: const Value(value: 180, unit: "°"),
+          relativeHumidity: const Value(value: 60, unit: "%"),
+          surfacePressure: const Value(value: 1015.0, unit: "hPa"),
           rain: const Value(value: 0.2, unit: "mm"),
           precipitation: const Value(value: 0.4, unit: "mm"),
-          cloud_cover: const Value(value: 50, unit: "%"),
-          is_day: true,
+          cloudCover: const Value(value: 50, unit: "%"),
+          isDay: true,
         ),
         hourly: [
           Hourly(
             time: DateTime.parse("2024-11-27T13:00:00Z"),
-            weather_code: 102,
+            weatherCode: 102,
             temperature: const Value(value: 21.0, unit: "C"),
-            dew_point: const Value(value: 15.0, unit: "C"),
-            apparent_temperature: const Value(value: 22.5, unit: "C"),
+            dewPoint: const Value(value: 15.0, unit: "C"),
+            apparentTemperature: const Value(value: 22.5, unit: "C"),
             rain: const Value(value: 0.3, unit: "mm"),
-            relative_humidity: const Value(value: 55, unit: "%"),
-            precipitation_probability: const Value(value: 20, unit: "%"),
+            relativeHumidity: const Value(value: 55, unit: "%"),
+            precipitationProbability: const Value(value: 20, unit: "%"),
           ),
         ],
         daily: [
           Daily(
             time: DateTime.parse("2024-11-27"),
-            weather_code: 103,
-            temperature_max: const Value(value: 25.0, unit: "C"),
-            temperature_min: const Value(value: 15.0, unit: "C"),
-            apparent_temperature_max: const Value(value: 26.0, unit: "C"),
-            apparent_temperature_min: const Value(value: 14.0, unit: "C"),
+            weatherCode: 103,
+            temperatureMax: const Value(value: 25.0, unit: "C"),
+            temperatureMin: const Value(value: 15.0, unit: "C"),
+            apparentTemperatureMax: const Value(value: 26.0, unit: "C"),
+            apparentTemperatureMin: const Value(value: 14.0, unit: "C"),
           ),
         ],
       );
@@ -98,30 +98,30 @@ void main() {
       };
 
       final forecast = Forecast.fromJson(json);
-      expect(forecast.utc_offset_seconds, 3600);
+      expect(forecast.utcOffsetSeconds, 3600);
       expect(forecast.current.temperature.value, 20.0);
       expect(forecast.hourly.length, 1);
       expect(forecast.daily.length, 1);
-      expect(forecast.hourly[0].weather_code, 102);
+      expect(forecast.hourly[0].weatherCode, 102);
     });
 
     test('Forecast should serialize to a JSON string correctly', () {
       final forecast = Forecast(
-        utc_offset_seconds: 3600,
+        utcOffsetSeconds: 3600,
         current: Current(
           time: DateTime.parse("2024-11-27T12:00:00Z"),
-          weather_code: 101,
+          weatherCode: 101,
           temperature: const Value(value: 20.0, unit: "C"),
-          apparent_temperature: const Value(value: 22.0, unit: "C"),
-          wind_speed: const Value(value: 5.0, unit: "m/s"),
-          wind_gusts: const Value(value: 8.0, unit: "m/s"),
-          wind_direction: const Value(value: 180, unit: "°"),
-          relative_humidity: const Value(value: 60, unit: "%"),
-          surface_pressure: const Value(value: 1015.0, unit: "hPa"),
+          apparentTemperature: const Value(value: 22.0, unit: "C"),
+          windSpeed: const Value(value: 5.0, unit: "m/s"),
+          windGusts: const Value(value: 8.0, unit: "m/s"),
+          windDirection: const Value(value: 180, unit: "°"),
+          relativeHumidity: const Value(value: 60, unit: "%"),
+          surfacePressure: const Value(value: 1015.0, unit: "hPa"),
           rain: const Value(value: 0.2, unit: "mm"),
           precipitation: const Value(value: 0.4, unit: "mm"),
-          cloud_cover: const Value(value: 50, unit: "%"),
-          is_day: true,
+          cloudCover: const Value(value: 50, unit: "%"),
+          isDay: true,
         ),
         hourly: [],
         daily: [],
@@ -136,28 +136,28 @@ void main() {
 
     test('Forecast should support equality comparison', () {
       final forecast1 = Forecast(
-        utc_offset_seconds: 3600,
+        utcOffsetSeconds: 3600,
         current: Current(
           time: DateTime.parse("2024-11-27T12:00:00Z"),
-          weather_code: 101,
+          weatherCode: 101,
           temperature: const Value(value: 20.0, unit: "C"),
-          apparent_temperature: const Value(value: 22.0, unit: "C"),
-          wind_speed: const Value(value: 5.0, unit: "m/s"),
-          wind_gusts: const Value(value: 8.0, unit: "m/s"),
-          wind_direction: const Value(value: 180, unit: "°"),
-          relative_humidity: const Value(value: 60, unit: "%"),
-          surface_pressure: const Value(value: 1015.0, unit: "hPa"),
+          apparentTemperature: const Value(value: 22.0, unit: "C"),
+          windSpeed: const Value(value: 5.0, unit: "m/s"),
+          windGusts: const Value(value: 8.0, unit: "m/s"),
+          windDirection: const Value(value: 180, unit: "°"),
+          relativeHumidity: const Value(value: 60, unit: "%"),
+          surfacePressure: const Value(value: 1015.0, unit: "hPa"),
           rain: const Value(value: 0.2, unit: "mm"),
           precipitation: const Value(value: 0.4, unit: "mm"),
-          cloud_cover: const Value(value: 50, unit: "%"),
-          is_day: true,
+          cloudCover: const Value(value: 50, unit: "%"),
+          isDay: true,
         ),
         hourly: [],
         daily: [],
       );
 
       final forecast2 = Forecast(
-        utc_offset_seconds: 3600,
+        utcOffsetSeconds: 3600,
         current: forecast1.current,
         hourly: [],
         daily: [],

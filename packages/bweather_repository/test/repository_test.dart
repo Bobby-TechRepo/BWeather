@@ -164,7 +164,7 @@ void main() {
                 try {
                     await repository.search(query);
                 } catch (_) {}
-                verify(() => httpClient.get(Uri.https('geocoding-api.open-meteo.com', '/v1/search', {'name': query }))).called(1);
+                verify(() => httpClient.get(Uri.https('geocoding-api.open-meteo.com', '/v1/search', {'name': query, 'count': '10', 'language': 'en' }))).called(1);
             });
 
             test('throws LocationRequestFailure on non-200 response', () async {
@@ -240,9 +240,11 @@ void main() {
                         .having((c) => c.country, 'Country', citySample.country)
                         .having((c) => c.elevation, 'Elevation', 38)
                         .having((c) => c.timezone, 'Time Zone', "GMT")
-                        .having((c) => c.longitude, 'Longitude', 13.419998)
-                        .having((c) => c.latitude, 'Latitude', 52.52)
-                        .having((c) => c.forecast?.utc_offset_seconds, 'UTC Offset',  0)
+                        // The requested coordinates are kept (not the API's grid cell),
+                        // so a saved place's id stays stable across refreshes.
+                        .having((c) => c.longitude, 'Longitude', citySample.longitude)
+                        .having((c) => c.latitude, 'Latitude', citySample.latitude)
+                        .having((c) => c.forecast?.utcOffsetSeconds, 'UTC Offset',  0)
                         .having((c) => c.forecast?.current != null, 'Current', true)
                         .having((c) => c.forecast?.daily != null && c.forecast?.daily is List<Daily>, 'Daily', true)
                         .having((c) => c.forecast?.hourly != null && c.forecast?.hourly is List<Hourly>, 'Hourly', true)
@@ -250,4 +252,4 @@ void main() {
             });
         });
     });
-}
+}

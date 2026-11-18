@@ -8,13 +8,13 @@ void main() {
     test('Hourly should serialize to JSON correctly', () {
       final hourly = Hourly(
         time: DateTime.parse("2024-11-27 15:00:00Z"),
-        dew_point: const Value(value: 10.5, unit: "C"),
-        precipitation_probability: const Value(value: 40, unit: "%"),
-        weather_code: 123,
+        dewPoint: const Value(value: 10.5, unit: "C"),
+        precipitationProbability: const Value(value: 40, unit: "%"),
+        weatherCode: 123,
         temperature: const Value(value: 25.0, unit: "C"),
-        relative_humidity: const Value(value: 50, unit: "%"),
+        relativeHumidity: const Value(value: 50, unit: "%"),
         rain: const Value(value: 0.5, unit: "mm"),
-        apparent_temperature: const Value(value: 27.0, unit: "C"),
+        apparentTemperature: const Value(value: 27.0, unit: "C"),
       );
 
       final json = hourly.toJson();
@@ -38,23 +38,23 @@ void main() {
 
       final hourly = Hourly.fromJson(json);
       expect(hourly.time, DateTime.parse("2024-11-27T15:00:00Z"));
-      expect(hourly.dew_point.value, 10.5);
-      expect(hourly.dew_point.unit, "C");
+      expect(hourly.dewPoint.value, 10.5);
+      expect(hourly.dewPoint.unit, "C");
       expect(hourly.temperature.value, 25.0);
       expect(hourly.rain.value, 0.5);
-      expect(hourly.precipitation_probability.value, 40);
+      expect(hourly.precipitationProbability.value, 40);
     });
 
     test('Hourly should serialize to a JSON string correctly', () {
       final hourly = Hourly(
         time: DateTime.parse("2024-11-27T15:00:00Z"),
-        dew_point: const Value(value: 10.5, unit: "C"),
-        precipitation_probability: const Value(value: 40, unit: "%"),
-        weather_code: 123,
+        dewPoint: const Value(value: 10.5, unit: "C"),
+        precipitationProbability: const Value(value: 40, unit: "%"),
+        weatherCode: 123,
         temperature: const Value(value: 25.0, unit: "C"),
-        relative_humidity: const Value(value: 50, unit: "%"),
+        relativeHumidity: const Value(value: 50, unit: "%"),
         rain: const Value(value: 0.5, unit: "mm"),
-        apparent_temperature: const Value(value: 27.0, unit: "C"),
+        apparentTemperature: const Value(value: 27.0, unit: "C"),
       );
 
       final serialized = hourly.serialize();
@@ -67,35 +67,35 @@ void main() {
     test('Hourly should support equality comparison', () {
       final hourly1 = Hourly(
         time: DateTime.parse("2024-11-27T15:00:00Z"),
-        dew_point: const Value(value: 10.5, unit: "C"),
-        precipitation_probability: const Value(value: 40, unit: "%"),
-        weather_code: 123,
+        dewPoint: const Value(value: 10.5, unit: "C"),
+        precipitationProbability: const Value(value: 40, unit: "%"),
+        weatherCode: 123,
         temperature: const Value(value: 25.0, unit: "C"),
-        relative_humidity: const Value(value: 50, unit: "%"),
+        relativeHumidity: const Value(value: 50, unit: "%"),
         rain: const Value(value: 0.5, unit: "mm"),
-        apparent_temperature: const Value(value: 27.0, unit: "C"),
+        apparentTemperature: const Value(value: 27.0, unit: "C"),
       );
 
       final hourly2 = Hourly(
         time: DateTime.parse("2024-11-27T15:00:00Z"),
-        dew_point: const Value(value: 10.5, unit: "C"),
-        precipitation_probability: const Value(value: 40, unit: "%"),
-        weather_code: 123,
+        dewPoint: const Value(value: 10.5, unit: "C"),
+        precipitationProbability: const Value(value: 40, unit: "%"),
+        weatherCode: 123,
         temperature: const Value(value: 25.0, unit: "C"),
-        relative_humidity: const Value(value: 50, unit: "%"),
+        relativeHumidity: const Value(value: 50, unit: "%"),
         rain: const Value(value: 0.5, unit: "mm"),
-        apparent_temperature: const Value(value: 27.0, unit: "C"),
+        apparentTemperature: const Value(value: 27.0, unit: "C"),
       );
 
       final hourly3 = Hourly(
         time: DateTime.parse("2024-11-27T15:00:00Z"),
-        dew_point: const Value(value: 15.0, unit: "C"), // Different dew point
-        precipitation_probability: const Value(value: 40, unit: "%"),
-        weather_code: 123,
+        dewPoint: const Value(value: 15.0, unit: "C"), // Different dew point
+        precipitationProbability: const Value(value: 40, unit: "%"),
+        weatherCode: 123,
         temperature: const Value(value: 25.0, unit: "C"),
-        relative_humidity: const Value(value: 50, unit: "%"),
+        relativeHumidity: const Value(value: 50, unit: "%"),
         rain: const Value(value: 0.5, unit: "mm"),
-        apparent_temperature: const Value(value: 27.0, unit: "C"),
+        apparentTemperature: const Value(value: 27.0, unit: "C"),
       );
 
       expect(hourly1 == hourly2, true); // Equal objects

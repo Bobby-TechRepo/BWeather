@@ -109,23 +109,23 @@ void main() {
         group('Units class tests', () {
           test('Default constructor should set default units', () {
             const units = Units();
-            expect(units.temp_unit, TempUnit.celsius);
-            expect(units.wind_speed_unit, WindSpeedUnit.ms);
-            expect(units.precipitation_unit, PrecipitationUnit.mm);
+            expect(units.tempUnit, TempUnit.celsius);
+            expect(units.windSpeedUnit, WindSpeedUnit.ms);
+            expect(units.precipitationUnit, PrecipitationUnit.mm);
           });
 
           test('Defaults constructor should set default units explicitly', () {
             const units = Units.defaults();
-            expect(units.temp_unit, TempUnit.celsius);
-            expect(units.wind_speed_unit, WindSpeedUnit.ms);
-            expect(units.precipitation_unit, PrecipitationUnit.mm);
+            expect(units.tempUnit, TempUnit.celsius);
+            expect(units.windSpeedUnit, WindSpeedUnit.ms);
+            expect(units.precipitationUnit, PrecipitationUnit.mm);
           });
 
           test('Serialization should produce correct JSON', () {
             const units = Units(
-              temp_unit: TempUnit.fahrenheit,
-              wind_speed_unit: WindSpeedUnit.mph,
-              precipitation_unit: PrecipitationUnit.inch,
+              tempUnit: TempUnit.fahrenheit,
+              windSpeedUnit: WindSpeedUnit.mph,
+              precipitationUnit: PrecipitationUnit.inch,
             );
 
             final json = units.toJson();
@@ -143,9 +143,9 @@ void main() {
 
             final units = Units.fromJson(json);
 
-            expect(units.temp_unit, TempUnit.celsius);
-            expect(units.wind_speed_unit, WindSpeedUnit.kmh);
-            expect(units.precipitation_unit, PrecipitationUnit.mm);
+            expect(units.tempUnit, TempUnit.celsius);
+            expect(units.windSpeedUnit, WindSpeedUnit.kmh);
+            expect(units.precipitationUnit, PrecipitationUnit.mm);
           });
 
           test('Deserialization should throw an exception for invalid temp_unit', () {
@@ -180,9 +180,9 @@ void main() {
 
           test('Serialize method should produce correct JSON string', () {
             const units = Units(
-              temp_unit: TempUnit.celsius,
-              wind_speed_unit: WindSpeedUnit.kn,
-              precipitation_unit: PrecipitationUnit.mm,
+              tempUnit: TempUnit.celsius,
+              windSpeedUnit: WindSpeedUnit.kn,
+              precipitationUnit: PrecipitationUnit.mm,
             );
 
             final serialized = units.serialize();
@@ -191,48 +191,48 @@ void main() {
 
           test('Copy method should create a new instance with updated fields', () {
             const units = Units(
-              temp_unit: TempUnit.celsius,
-              wind_speed_unit: WindSpeedUnit.ms,
-              precipitation_unit: PrecipitationUnit.mm,
+              tempUnit: TempUnit.celsius,
+              windSpeedUnit: WindSpeedUnit.ms,
+              precipitationUnit: PrecipitationUnit.mm,
             );
 
-            final copied = units.copy(temp_unit: TempUnit.fahrenheit, precipitation_unit: PrecipitationUnit.inch);
+            final copied = units.copy(tempUnit: TempUnit.fahrenheit, precipitationUnit: PrecipitationUnit.inch);
 
-            expect(copied.temp_unit, TempUnit.fahrenheit);
-            expect(copied.wind_speed_unit, WindSpeedUnit.ms);
-            expect(copied.precipitation_unit, PrecipitationUnit.inch);
+            expect(copied.tempUnit, TempUnit.fahrenheit);
+            expect(copied.windSpeedUnit, WindSpeedUnit.ms);
+            expect(copied.precipitationUnit, PrecipitationUnit.inch);
           });
 
           test('Copy method should retain all values if no arguments are provided', () {
             const original = Units(
-              temp_unit: TempUnit.celsius,
-              wind_speed_unit: WindSpeedUnit.ms,
-              precipitation_unit: PrecipitationUnit.mm,
+              tempUnit: TempUnit.celsius,
+              windSpeedUnit: WindSpeedUnit.ms,
+              precipitationUnit: PrecipitationUnit.mm,
             );
 
             final copy = original.copy();
 
-            expect(copy.temp_unit, original.temp_unit);
-            expect(copy.wind_speed_unit, original.wind_speed_unit);
-            expect(copy.precipitation_unit, original.precipitation_unit);
+            expect(copy.tempUnit, original.tempUnit);
+            expect(copy.windSpeedUnit, original.windSpeedUnit);
+            expect(copy.precipitationUnit, original.precipitationUnit);
           });
 
           test('Units should remain immutable after copying', () {
             const units = Units(
-              temp_unit: TempUnit.celsius,
-              wind_speed_unit: WindSpeedUnit.ms,
-              precipitation_unit: PrecipitationUnit.mm,
+              tempUnit: TempUnit.celsius,
+              windSpeedUnit: WindSpeedUnit.ms,
+              precipitationUnit: PrecipitationUnit.mm,
             );
 
-            final copied = units.copy(temp_unit: TempUnit.fahrenheit);
+            final copied = units.copy(tempUnit: TempUnit.fahrenheit);
 
-            expect(units.temp_unit, TempUnit.celsius);
-            expect(units.wind_speed_unit, WindSpeedUnit.ms);
-            expect(units.precipitation_unit, PrecipitationUnit.mm);
+            expect(units.tempUnit, TempUnit.celsius);
+            expect(units.windSpeedUnit, WindSpeedUnit.ms);
+            expect(units.precipitationUnit, PrecipitationUnit.mm);
 
-            expect(copied.temp_unit, TempUnit.fahrenheit);
-            expect(copied.wind_speed_unit, WindSpeedUnit.ms);
-            expect(copied.precipitation_unit, PrecipitationUnit.mm);
+            expect(copied.tempUnit, TempUnit.fahrenheit);
+            expect(copied.windSpeedUnit, WindSpeedUnit.ms);
+            expect(copied.precipitationUnit, PrecipitationUnit.mm);
           });
         });
     });

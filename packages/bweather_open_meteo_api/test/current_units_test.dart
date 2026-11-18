@@ -8,20 +8,20 @@ void main() {
   group('CurrentUnits', () {
     group('Constructor', () {
       test('returns an instance Current Units object with Constructor', () {
-        expect(const CurrentUnits( temperature_2m: "°C", relative_humidity_2m: "%", apparent_temperature: "°C", pressure_msl: "hPa", precipitation: "mm",
-            rain: "mm", cloud_cover: "%", surface_pressure: "hPa", wind_speed_10m: "km/h", wind_direction_10m: "°", wind_gusts_10m: "km/h"),
+        expect(const CurrentUnits( temperature2m: "°C", relativeHumidity2m: "%", apparentTemperature: "°C", pressureMsl: "hPa", precipitation: "mm",
+            rain: "mm", cloudCover: "%", surfacePressure: "hPa", windSpeed10m: "km/h", windDirection10m: "°", windGusts10m: "km/h"),
             isA<CurrentUnits>()
                 .having((c) => c.precipitation, 'precipitation', 'mm')
-                .having((c) => c.relative_humidity_2m, 'Relative Humidity', '%')
-                .having((c) => c.cloud_cover, 'Cloud Cover', '%')
-                .having((c) => c.surface_pressure, 'Surface Pressure', "hPa")
+                .having((c) => c.relativeHumidity2m, 'Relative Humidity', '%')
+                .having((c) => c.cloudCover, 'Cloud Cover', '%')
+                .having((c) => c.surfacePressure, 'Surface Pressure', "hPa")
                 .having((c) => c.rain, 'rain', "mm")
-                .having((c) => c.wind_gusts_10m, 'Wind Gust', "km/h")
-                .having((c) => c.pressure_msl, 'Sea Level Pressure', "hPa")
-                .having((c) => c.apparent_temperature, 'Apparent Temperature', "°C")
-                .having((c) => c.wind_direction_10m, 'Wind Direction', "°")
-                .having((c) => c.wind_speed_10m, 'Wind Speed', "km/h")
-                .having((c) => c.temperature_2m, 'Temperature', "°C"));
+                .having((c) => c.windGusts10m, 'Wind Gust', "km/h")
+                .having((c) => c.pressureMsl, 'Sea Level Pressure', "hPa")
+                .having((c) => c.apparentTemperature, 'Apparent Temperature', "°C")
+                .having((c) => c.windDirection10m, 'Wind Direction', "°")
+                .having((c) => c.windSpeed10m, 'Wind Speed', "km/h")
+                .having((c) => c.temperature2m, 'Temperature', "°C"));
       });
     });
     group('fromJson', () {
@@ -33,16 +33,16 @@ void main() {
         }),
             isA<CurrentUnits>()
                 .having((c) => c.precipitation, 'precipitation', 'mm')
-                .having((c) => c.relative_humidity_2m, 'Relative Humidity', '%')
-                .having((c) => c.cloud_cover, 'Cloud Cover', '%')
-                .having((c) => c.surface_pressure, 'Surface Pressure', "hPa")
+                .having((c) => c.relativeHumidity2m, 'Relative Humidity', '%')
+                .having((c) => c.cloudCover, 'Cloud Cover', '%')
+                .having((c) => c.surfacePressure, 'Surface Pressure', "hPa")
                 .having((c) => c.rain, 'rain', "mm")
-                .having((c) => c.wind_gusts_10m, 'Wind Gust', "km/h")
-                .having((c) => c.pressure_msl, 'Sea Level Pressure', "hPa")
-                .having((c) => c.apparent_temperature, 'Apparent Temperature', "°C")
-                .having((c) => c.wind_direction_10m, 'Wind Direction', "°")
-                .having((c) => c.wind_speed_10m, 'Wind Speed', "km/h")
-                .having((c) => c.temperature_2m, 'Temperature', "°C"));
+                .having((c) => c.windGusts10m, 'Wind Gust', "km/h")
+                .having((c) => c.pressureMsl, 'Sea Level Pressure', "hPa")
+                .having((c) => c.apparentTemperature, 'Apparent Temperature', "°C")
+                .having((c) => c.windDirection10m, 'Wind Direction', "°")
+                .having((c) => c.windSpeed10m, 'Wind Speed', "km/h")
+                .having((c) => c.temperature2m, 'Temperature', "°C"));
       });
       test('returns correct CurrentUnits object from json String', () {
         expect(CurrentUnits.fromJson(jsonDecode('''{
@@ -52,22 +52,22 @@ void main() {
         }''')),
             isA<CurrentUnits>()
                 .having((c) => c.precipitation, 'precipitation', 'mm')
-                .having((c) => c.relative_humidity_2m, 'Relative Humidity', '%')
-                .having((c) => c.cloud_cover, 'Cloud Cover', '%')
-                .having((c) => c.surface_pressure, 'Surface Pressure', "hPa")
+                .having((c) => c.relativeHumidity2m, 'Relative Humidity', '%')
+                .having((c) => c.cloudCover, 'Cloud Cover', '%')
+                .having((c) => c.surfacePressure, 'Surface Pressure', "hPa")
                 .having((c) => c.rain, 'rain', "mm")
-                .having((c) => c.wind_gusts_10m, 'Wind Gust', "km/h")
-                .having((c) => c.pressure_msl, 'Sea Level Pressure', "hPa")
-                .having((c) => c.apparent_temperature, 'Apparent Temperature', "°C")
-                .having((c) => c.wind_direction_10m, 'Wind Direction', "°")
-                .having((c) => c.wind_speed_10m, 'Wind Speed', "km/h")
-                .having((c) => c.temperature_2m, 'Temperature', "°C"));
+                .having((c) => c.windGusts10m, 'Wind Gust', "km/h")
+                .having((c) => c.pressureMsl, 'Sea Level Pressure', "hPa")
+                .having((c) => c.apparentTemperature, 'Apparent Temperature', "°C")
+                .having((c) => c.windDirection10m, 'Wind Direction', "°")
+                .having((c) => c.windSpeed10m, 'Wind Speed', "km/h")
+                .having((c) => c.temperature2m, 'Temperature', "°C"));
       });
     });
     group('toJson', () {
       test('returns a map json of Current Units object', () {
-        expect(const CurrentUnits( temperature_2m: "°C", relative_humidity_2m: "%", apparent_temperature: "°C", pressure_msl: "hPa", precipitation: "mm",
-            rain: "mm", cloud_cover: "%", surface_pressure: "hPa", wind_speed_10m: "km/h", wind_direction_10m: "°", wind_gusts_10m: "km/h").toJson(),
+        expect(const CurrentUnits( temperature2m: "°C", relativeHumidity2m: "%", apparentTemperature: "°C", pressureMsl: "hPa", precipitation: "mm",
+            rain: "mm", cloudCover: "%", surfacePressure: "hPa", windSpeed10m: "km/h", windDirection10m: "°", windGusts10m: "km/h").toJson(),
             isA<Map<String, dynamic>>()
                 .having((c) => c["precipitation"], 'precipitation', 'mm')
                 .having((c) => c["relative_humidity_2m"], 'Relative Humidity', '%')
@@ -83,4 +83,4 @@ void main() {
       });
     });
   });
-}
+}

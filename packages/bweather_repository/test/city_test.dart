@@ -15,21 +15,21 @@ void main() {
         latitude: 37.7749,
         longitude: -122.4194,
         forecast: Forecast(
-          utc_offset_seconds: -28800,
+          utcOffsetSeconds: -28800,
           current: Current(
             time: DateTime.parse("2024-11-27T12:00:00Z"),
-            weather_code: 101,
+            weatherCode: 101,
             temperature: const Value(value: 15.0, unit: "C"),
-            apparent_temperature: const Value(value: 14.0, unit: "C"),
-            wind_speed: const Value(value: 5.0, unit: "m/s"),
-            wind_gusts: const Value(value: 8.0, unit: "m/s"),
-            wind_direction: const Value(value: 180, unit: "°"),
-            relative_humidity: const Value(value: 70, unit: "%"),
-            surface_pressure: const Value(value: 1012.0, unit: "hPa"),
+            apparentTemperature: const Value(value: 14.0, unit: "C"),
+            windSpeed: const Value(value: 5.0, unit: "m/s"),
+            windGusts: const Value(value: 8.0, unit: "m/s"),
+            windDirection: const Value(value: 180, unit: "°"),
+            relativeHumidity: const Value(value: 70, unit: "%"),
+            surfacePressure: const Value(value: 1012.0, unit: "hPa"),
             rain: const Value(value: 0.1, unit: "mm"),
             precipitation: const Value(value: 0.2, unit: "mm"),
-            cloud_cover: const Value(value: 50, unit: "%"),
-            is_day: true,
+            cloudCover: const Value(value: 50, unit: "%"),
+            isDay: true,
           ),
           hourly: [],
           daily: [],
@@ -84,7 +84,7 @@ void main() {
       expect(city.elevation, 16.0);
       expect(city.latitude, 37.7749);
       expect(city.longitude, -122.4194);
-      expect(city.forecast?.utc_offset_seconds, -28800);
+      expect(city.forecast?.utcOffsetSeconds, -28800);
     });
 
     test('City should serialize to a JSON string correctly', () {

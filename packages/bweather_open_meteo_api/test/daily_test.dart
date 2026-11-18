@@ -26,31 +26,31 @@ void main() {
       test('returns correct Daily object from json map', () {
         expect(Daily.fromJson(jsonDecode(json)),
             isA<Daily>()
-                .having((c) => c.weather_code, 'Weather Codes', [ 80, 63 ])
+                .having((c) => c.weatherCode, 'Weather Codes', [ 80, 63 ])
                 .having((c) => c.time, 'Time', [DateTime.parse("2024-11-26"),  DateTime.parse("2024-11-27") ])
-                .having((c) => c.precipitation_sum , 'Precipitation Sum', [ 1.6, 10.2 ])
-                .having((c) => c.wind_speed_10m_max, 'Wind Speed', [ 11.2, 17.1 ])
-                .having((c) => c.wind_gusts_10m_max, 'Wind Gust', [ 27.7, 37.1 ])
-                .having((c) => c.temperature_2m_max, 'Temperature Max', [10.6, 7.5 ])
-                .having((c) => c.temperature_2m_min, 'Temperature Min', [ 7.2, 4.9 ])
-                .having((c) => c.apparent_temperature_max, 'Apparent Temperature Max', [ 5.3, 2.6 ])
-                .having((c) => c.apparent_temperature_min, 'Apparent Temperature Min', [ 5.3, 2.6 ])
+                .having((c) => c.precipitationSum , 'Precipitation Sum', [ 1.6, 10.2 ])
+                .having((c) => c.windSpeed10mMax, 'Wind Speed', [ 11.2, 17.1 ])
+                .having((c) => c.windGusts10mMax, 'Wind Gust', [ 27.7, 37.1 ])
+                .having((c) => c.temperature2mMax, 'Temperature Max', [10.6, 7.5 ])
+                .having((c) => c.temperature2mMin, 'Temperature Min', [ 7.2, 4.9 ])
+                .having((c) => c.apparentTemperatureMax, 'Apparent Temperature Max', [ 5.3, 2.6 ])
+                .having((c) => c.apparentTemperatureMin, 'Apparent Temperature Min', [ 5.3, 2.6 ])
                 .having((c) => c.sunrise, 'Sunrise', [DateTime.parse("2024-11-26"),  DateTime.parse("2024-11-27") ])
                 .having((c) => c.sunset, 'Sunset', [DateTime.parse("2024-11-26"),  DateTime.parse("2024-11-27") ])
-                .having((c) => c.rain_sum, 'Rain Sum', [ 1.3, 10.3 ]));
+                .having((c) => c.rainSum, 'Rain Sum', [ 1.3, 10.3 ]));
       });
     });
     group('toJson', () {
       test('returns a map json of Hourly object', () {
         expect(Daily(
-            weather_code : [ 80, 63 ],
+            weatherCode : [ 80, 63 ],
             time: [DateTime.parse("2024-11-26"),  DateTime.parse("2024-11-27") ],
             sunset: [DateTime.parse("2024-11-26"),  DateTime.parse("2024-11-27") ],
             sunrise: [DateTime.parse("2024-11-26"),  DateTime.parse("2024-11-27") ],
-            temperature_2m_min : [ 7.2, 4.9 ],  apparent_temperature_min: [ 5.3, 2.6 ],
-            temperature_2m_max : [10.6, 7.5 ],  apparent_temperature_max: [ 5.3, 2.6 ],
-            rain_sum: [ 1.3, 10.3 ], precipitation_sum: [ 1.6, 10.2 ],
-            wind_speed_10m_max: [ 11.2, 17.1 ], wind_gusts_10m_max: [ 27.7, 37.1 ]
+            temperature2mMin : [ 7.2, 4.9 ],  apparentTemperatureMin: [ 5.3, 2.6 ],
+            temperature2mMax : [10.6, 7.5 ],  apparentTemperatureMax: [ 5.3, 2.6 ],
+            rainSum: [ 1.3, 10.3 ], precipitationSum: [ 1.6, 10.2 ],
+            windSpeed10mMax: [ 11.2, 17.1 ], windGusts10mMax: [ 27.7, 37.1 ]
         ).toJson(),
             isA<Map<String, dynamic>>()
                 .having((c) => c["weather_code"], 'Weather Codes', [ 80, 63 ])
@@ -68,4 +68,4 @@ void main() {
       });
     });
   });
-}
+}

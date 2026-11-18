@@ -84,39 +84,42 @@ extension PrecipitationUnitParseExtension on String{
 }
 
 class Units extends Equatable{
-    final TempUnit temp_unit;
-    final WindSpeedUnit wind_speed_unit;
-    final PrecipitationUnit precipitation_unit;
+    final TempUnit tempUnit;
+    final WindSpeedUnit windSpeedUnit;
+    final PrecipitationUnit precipitationUnit;
 
     const Units({
-        this.temp_unit = TempUnit.celsius, this.wind_speed_unit = WindSpeedUnit.ms,
-        this.precipitation_unit = PrecipitationUnit.mm,
+        this.tempUnit = TempUnit.celsius, this.windSpeedUnit = WindSpeedUnit.ms,
+        this.precipitationUnit = PrecipitationUnit.mm,
     });
 
-    const Units.defaults() : temp_unit = TempUnit.celsius, wind_speed_unit = WindSpeedUnit.ms, precipitation_unit = PrecipitationUnit.mm;
+    const Units.defaults() : tempUnit = TempUnit.celsius, windSpeedUnit = WindSpeedUnit.ms, precipitationUnit = PrecipitationUnit.mm;
+
+    /// What the app fetches in; the user's units are applied on the device.
+    static const metric = Units(tempUnit: TempUnit.celsius, windSpeedUnit: WindSpeedUnit.kmh, precipitationUnit: PrecipitationUnit.mm);
 
     factory Units.fromJson(dynamic json) {
         return Units(
-            temp_unit: json["temp_unit"].toString().tempUnit,
-            wind_speed_unit: json["wind_speed_unit"].toString().windSpeedUnit,
-            precipitation_unit: json["precipitation_unit"].toString().precipitationUnit);
+            tempUnit: json["temp_unit"].toString().tempUnit,
+            windSpeedUnit: json["wind_speed_unit"].toString().windSpeedUnit,
+            precipitationUnit: json["precipitation_unit"].toString().precipitationUnit);
     }
 
-    Units copy({ TempUnit? temp_unit, WindSpeedUnit? wind_speed_unit, PrecipitationUnit? precipitation_unit }){
+    Units copy({ TempUnit? tempUnit, WindSpeedUnit? windSpeedUnit, PrecipitationUnit? precipitationUnit }){
         return Units(
-            temp_unit: temp_unit ?? this.temp_unit,
-            precipitation_unit: precipitation_unit ?? this.precipitation_unit,
-            wind_speed_unit: wind_speed_unit ?? this.wind_speed_unit
+            tempUnit: tempUnit ?? this.tempUnit,
+            precipitationUnit: precipitationUnit ?? this.precipitationUnit,
+            windSpeedUnit: windSpeedUnit ?? this.windSpeedUnit
         );
     }
 
     Map<String, dynamic> toJson() => {
-        "temp_unit" : temp_unit.serialize, "wind_speed_unit": wind_speed_unit.serialize,
-        "precipitation_unit": precipitation_unit.serialize,
+        "temp_unit" : tempUnit.serialize, "wind_speed_unit": windSpeedUnit.serialize,
+        "precipitation_unit": precipitationUnit.serialize,
     };
 
     String serialize() => jsonEncode(toJson());
 
     @override
-    List<Object?> get props => [ temp_unit.serialize, precipitation_unit.serialize, wind_speed_unit.serialize ];
-}
+    List<Object?> get props => [ tempUnit.serialize, precipitationUnit.serialize, windSpeedUnit.serialize ];
+}
