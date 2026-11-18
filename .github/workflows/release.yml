@@ -113,8 +113,7 @@ jobs:
           if (!(Test-Path "$bundle/bweather.exe")) {
             throw "Expected executable was not produced: $bundle/bweather.exe"
           }
-
-          Copy-Item "$bundle/bweather.exe" "dist/bweather.exe"
+          
           Compress-Archive -Path "$bundle/*" -DestinationPath "dist/bweather-windows.zip" -Force
 
       - name: Upload Windows artifacts
@@ -122,7 +121,6 @@ jobs:
         with:
           name: windows-release
           path: |
-            dist/bweather.exe
             dist/bweather-windows.zip
           if-no-files-found: error
           retention-days: 7
@@ -169,7 +167,6 @@ jobs:
           bundle="build/linux/x64/release/bundle"
 
           test -f "$bundle/bweather"
-          cp "$bundle/bweather" dist/bweather
           tar -czf dist/bweather-linux.tar.gz -C "$bundle" .
 
       - name: Upload Linux artifacts
@@ -177,7 +174,6 @@ jobs:
         with:
           name: linux-release
           path: |
-            dist/bweather
             dist/bweather-linux.tar.gz
           if-no-files-found: error
           retention-days: 7
@@ -231,14 +227,14 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p dist
-          (cd build/web && zip -qr ../../dist/bweather.zip .)
+          (cd build/web && zip -qr ../../dist/bweather-web.zip .)
 
       - name: Upload Web release artifact
         if: startsWith(github.ref, 'refs/tags/v')
         uses: actions/upload-artifact@v4
         with:
           name: web-release
-          path: dist/bweather.zip
+          path: dist/bweather-web.zip
           if-no-files-found: error
           retention-days: 7
 
@@ -275,10 +271,8 @@ jobs:
           fail_on_unmatched_files: true
           files: |
             dist/bweather.apk
-            dist/bweather.exe
             dist/bweather-windows.zip
-            dist/bweather.zip
-            dist/bweather
+            dist/bweather-web.zip
             dist/bweather-linux.tar.gz
 
   deploy-pages:
