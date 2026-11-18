@@ -6,33 +6,14 @@ extension StateStatusX on StateStatus {
     bool get isSuccess => this == StateStatus.success;
     bool get isFailure => this == StateStatus.failure;
 
-    String get serialize{
-        switch(this){
-            case StateStatus.failure:
-                return "failure";
-            case StateStatus.loading:
-                return "loading";
-            case StateStatus.initial:
-                return "initial";
-            case StateStatus.success:
-                return "success";
-        }
-    }
+    String get serialize => name;
 }
 
 extension StateStatusString on String {
-    StateStatus get toForecaseStatus{
-        switch(toLowerCase()){
-            case "loading":
-                return StateStatus.loading;
-            case "failure":
-                return StateStatus.failure;
-            case "initial":
-                return StateStatus.initial;
-            case "success":
-                return StateStatus.success;
-            default:
-                throw Exception("$this is not valid City Stutus");
-        }
-    }
+    /// Parses a persisted status. Unknown values fall back to [StateStatus.initial]
+    /// instead of throwing, so an odd value can't wipe the saved state.
+    StateStatus get toStateStatus => StateStatus.values.firstWhere(
+        (status) => status.name == toLowerCase(),
+        orElse: () => StateStatus.initial,
+    );
 }

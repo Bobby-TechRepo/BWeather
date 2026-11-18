@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: |
+          flutter pub get
+          (cd packages/bweather_open_meteo_api && flutter pub get)
+          (cd packages/bweather_repository && flutter pub get)
+
+      - name: Check formatting
+        # Informational for now: the codebase uses 4-space indentation and
+        # hasn't been run through `dart format` yet.
+        run: dart format --output=none --set-exit-if-changed lib test packages/*/lib packages/*/test || true
+
+      - name: Analyze
+        # Infos (e.g. deprecations) don't fail the build yet; warnings and errors do.
+        run: flutter analyze --no-fatal-infos
+
+      - name: Test app
+        run: flutter test
+
+      - name: Test Open-Meteo client
+        working-directory: packages/bweather_open_meteo_api
+        run: flutter test
+
+      - name: Test repository
+        working-directory: packages/bweather_repository
+        run: flutter test

@@ -1,87 +1,47 @@
-import 'package:bweatherflutter/components/locatiions.dart';
-import 'package:bweatherflutter/components/location.dart';
-import 'package:bweatherflutter/states/forecast/weather_state.dart';
-import 'package:bweatherflutter/states/main_cubit.dart';
-import 'package:bweatherflutter/states/weather_cubit.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:bweather/components/location_list.dart';
+import 'package:bweather/l10n/l10n.dart';
+import 'package:bweather/screens/cities.dart';
+import 'package:bweather/states/weather_cubit.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:liquid_pull_refresh/liquid_pull_refresh.dart';
 
-class Locations extends StatefulWidget {
-    final GlobalKey<LiquidPullRefreshState> refreshIndicatorKey = GlobalKey<LiquidPullRefreshState>();
-
-    Locations({super.key});
-
-    @override
-    State<StatefulWidget> createState() => __LocationsState();
-}
-
-class __LocationsState extends State<Locations>{
-    late ScrollController __scrollController;
-    late MainCubit __mainCubit;
-
-    @override
-    void initState() {
-        __scrollController = ScrollController();
-        __scrollController.addListener(onScroll);
-        super.initState();
-    }
-
-    void onScroll(){
-        switch(__scrollController.position.userScrollDirection){
-            case ScrollDirection.forward:
-                __mainCubit.showFAO = true;
-                break;
-            case ScrollDirection.reverse:
-                __mainCubit.showFAO = false;
-                break;
-            case ScrollDirection.idle:
-                break;
-        }
-    }
+/// Locations tab (phones and tablets): a large title, a search field to add
+/// cities, then the saved places as sky-tinted cards. Pull down to refresh all.
+class Locations extends StatelessWidget {
+    const Locations({ super.key });
 
     @override
     Widget build(BuildContext context) {
-        final ColorScheme theme = Theme.of(context).colorScheme;
-        WeatherCubit weatherCubit = context.read<WeatherCubit>();
-        __mainCubit = context.read<MainCubit>();
+        final l10n = context.l10n;
+        void addCity() => Navigator.of(context).pushNamed(CitiesScreen.routeName);
 
-        return CustomScrollView(//controller: __scrollController,
-            slivers: [
-              SliverAppBar(pinned: true,
-                  elevation: 200,
-                  shadowColor: theme.onSurface,
-                  leading: const Icon(Icons.map_outlined),
-                  title: Text("Cities", style: TextStyle(color: theme.onSurface, fontSize: 20),)),
-              SliverFillRemaining(child: LiquidPullRefresh(
-                  onRefresh: () async{ await weatherCubit.reload(force: true); },
-                  showChildOpacityTransition: false,
-                  backgroundColor: theme.surface,
-                  animSpeedFactor: 2.0,
-                  color: theme.primary,
-                  heightLoader: 80,
-                  height: 80,
-                  showDroplet: true,
-                  springAnimationDurationInMilliseconds: 400,
-                  key: widget.refreshIndicatorKey,
-                  child: LocationsView(scrollController: __scrollController))),
-              /*SliverList.s(
-                  itemCount: weatherNotifier.savedCities.length,
-                  itemBuilder: (context, index) => Padding(
-                      padding: EdgeInsets.only(right: 15, left: 15, bottom: 15, top: index == 0 ? 15 : 0),
-                      child: LocationItem(index: index),
-                  ),
-                  //separatorBuilder: (context, index) => const SizedBox(height: 15,),
-              ),*/
-            ],
+        return RefreshIndicator(
+            // Below the large app bar, so the spinner doesn't cover the title.
+            edgeOffset: 112,
+            onRefresh: () => context.read<WeatherCubit>().refreshAll(force: true),
+            child: LocationList(
+                headerSlivers: [
+                    SliverAppBar.large(
+                        automaticallyImplyLeading: false,
+                        title: Text(l10n.navLocations),
+                        actions: [
+                            IconButton(tooltip: l10n.addCity, icon: const Icon(Icons.add_location_alt_outlined), onPressed: addCity),
+                            const SizedBox(width: 8),
+                        ],
+                    ),
+                    SliverToBoxAdapter(
+                        child: Center(
+                            child: ConstrainedBox(
+                                constraints: const BoxConstraints(maxWidth: LocationList.maxCardWidth + 32),
+                                child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+                                    child: AddCityField(onTap: addCity),
+                                ),
+                            ),
+                        ),
+                    ),
+                ],
+            ),
         );
-    }
-
-    @override
-    void dispose(){
-        __scrollController.removeListener(onScroll);
-        __scrollController.dispose();
-        super.dispose();
     }
 }

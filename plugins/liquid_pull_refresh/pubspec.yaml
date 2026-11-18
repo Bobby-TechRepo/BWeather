@@ -1,0 +1,22 @@
+name: liquid_pull_refresh
+description: "Liquid-style pull-to-refresh widget used by BWeather (pure Dart, no platform code)."
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ^3.13.4
+  flutter: '>=3.47.0'
+
+# Resolved together with the app (see the workspace list in the root pubspec.yaml).
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Material widgets moved out of the Flutter SDK (deprecated there in 3.50).
+  material_ui: ^1.4.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0

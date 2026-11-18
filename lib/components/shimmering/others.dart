@@ -1,5 +1,5 @@
-import 'package:bweatherflutter/components/shimmering/shimmer_wraper.dart';
-import 'package:flutter/material.dart';
+import 'package:bweather/components/shimmering/shimmer_wrapper.dart';
+import 'package:material_ui/material_ui.dart';
 
 class OthersShimmering extends StatelessWidget{
 

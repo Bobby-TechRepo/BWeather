@@ -1,109 +1,224 @@
-import 'package:bweather_repository/bweather_repository.dart';
-import 'package:bweatherflutter/components/clickable.dart';
-import 'package:bweatherflutter/components/shimmering/location.dart';
-import 'package:bweatherflutter/states/forecast/city_state.dart';
-import 'package:bweatherflutter/states/forecast/weather_state.dart';
-import 'package:bweatherflutter/states/main_cubit.dart';
-import 'package:bweatherflutter/states/weather_cubit.dart';
-import 'package:bweatherflutter/utils/status.dart';
-import 'package:bweatherflutter/utils/utils.dart';
-import 'package:bweatherflutter/utils/weather_codes.dart';
-import 'package:flutter/material.dart';
+import 'package:bweather/components/shimmering/location.dart';
+import 'package:bweather/components/weather_background.dart';
+import 'package:bweather/l10n/l10n.dart';
+import 'package:bweather/states/forecast/city_state.dart';
+import 'package:bweather/states/forecast/weather_state.dart';
+import 'package:bweather/states/main_cubit.dart';
+import 'package:bweather/states/weather_cubit.dart';
+import 'package:bweather/utils/sky_palette.dart';
+import 'package:bweather/utils/status.dart';
+import 'package:bweather/utils/utils.dart';
+import 'package:bweather/utils/weather_codes.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-class LocationItem extends StatefulWidget{
-    final int index;
+/// Card for one place in the Locations list, tinted by the sky there:
+/// name, local time, conditions, temperature, today's high/low and the next hours.
+class LocationItem extends StatelessWidget {
+    final String placeKey;
 
-    const LocationItem({ super.key, required this.index });
+    /// Narrow layout for the desktop side panel (fewer hours, smaller type).
+    final bool compact;
 
-    @override
-    State<StatefulWidget> createState() => __LocationItemState();
-}
+    /// Shown for saved cities: opens a menu with "Remove".
+    final VoidCallback? onRemove;
 
-class __LocationItemState extends State<LocationItem>{
+    const LocationItem({ super.key, required this.placeKey, this.compact = false, this.onRemove });
+
     @override
     Widget build(BuildContext context) {
-        ColorScheme theme = Theme.of(context).colorScheme;
-
-        return BlocBuilder<WeatherCubit, WeatherState>(
-            builder: (context, state){
-                CityState cityState = widget.index == -1 ? state.location! : state.cities[widget.index];
-
-                if(cityState.status.isLoading){
+        return BlocSelector<WeatherCubit, WeatherState, CityState?>(
+            selector: (state) => state.place(placeKey),
+            builder: (context, place) {
+                if (place == null) return const SizedBox.shrink();
+                if (place.city.forecast == null && !place.status.isFailure) {
                     return const LocationItemShimmering();
                 }
-
-                String temperature = "--", unit = "", time = "--:--";
-                int code = 0;
-                bool isNight = false;
-                if(cityState.city.forecast != null){
-                    Current current = cityState.city.forecast!.current;
-
-                    temperature = "${current.temperature.value.ceil()}";
-                    unit = current.temperature.unit;
-
-                    time = formatTime(time: current.time, timezone: (cityState.city.forecast!.utc_offset_seconds / 3600).ceil());
-                    code = current.weather_code;
-                    isNight = !current.is_day;
-                }
-
-                return Clickable(clicked: (){ context.read<MainCubit>().index = widget.index + 1; },
-                    child: Container(
-                        padding: const EdgeInsets.all(12.0),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: theme.surfaceContainerHigh,
-                            /*boxShadow: [
-                                BoxShadow(color: Colors.grey.withOpacity(0.5), spreadRadius: 1, blurRadius: 3, offset: const Offset(0, 2)),
-                            ]*/
-                        ),
-                        child: Column(children: [
-                            Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                                SvgPicture.asset(WeatherCode.decode(code: code, isNight: isNight).image, width: 100, height: 100),
-                                Expanded(
-                                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                      Row(
-                                        children: [
-                                            Expanded(child: Text(cityState.city.name, maxLines: 1, style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700, color: theme.primary))),
-                                            Visibility(visible: widget.index != -1, child: Container(alignment: Alignment.centerRight,
-                                                child: IconButton(style: const ButtonStyle(padding: WidgetStatePropertyAll(EdgeInsets.zero)), icon: const Icon(Icons.cancel_outlined), color: theme.error, onPressed: (){ context.read<WeatherCubit>().remove(widget.index); }),)),
-                                        ],
-                                      ),
-                                      Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                          Expanded(
-                                            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                                Text(WeatherCode.decode(code: code, isNight: isNight).description, style: GoogleFonts.aBeeZee(fontSize: 16, fontWeight: FontWeight.w600, color: theme.onSurface)),
-                                                Text(time, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300, color: theme.onSurface))
-                                            ],),
-                                          ),
-                                          Text("$temperature°", style: GoogleFonts.fuzzyBubbles(fontSize: 46, letterSpacing: 1.4, fontWeight: FontWeight.w200, color: theme.primary))
-                                      ],)
-                                  ],),
-                                ),
-                            ],),
-                            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [0, 1, 2, 3, 4].map((index){
-                                if(cityState.city.forecast != null){
-                                    Hourly hourly = cityState.city.forecast!.hourly[index];
-
-                                    temperature =hourly.temperature.value.ceil().toString();
-                                    unit = hourly.temperature.unit;
-
-                                    DateTime initTime = hourly.time;
-                                    time = "${initTime.hour}:00";
-                                    code = hourly.weather_code;
-                                    isNight = hourly.time.hour > 18 || hourly.time.hour < 6;
-                                }
-
-                                return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                                    SvgPicture.asset(WeatherCode.decode(code: code, isNight: isNight).image, height: 60),
-                                    Text("$temperature$unit", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: theme.primary)),
-                                    Text(time, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300, color: theme.onSurface)),
-                                ],);
-                            }).toList(),)
-                        ],)
-                    ),
-                  );
+                return _SkyCard(place: place, compact: compact, onRemove: onRemove);
             },
+        );
+    }
+}
+
+class _SkyCard extends StatelessWidget {
+    final CityState place;
+    final bool compact;
+    final VoidCallback? onRemove;
+
+    const _SkyCard({ required this.place, required this.compact, this.onRemove });
+
+    static const _shadow = [Shadow(color: Color(0x40000000), blurRadius: 6)];
+
+    @override
+    Widget build(BuildContext context) {
+        final l10n = context.l10n;
+        final locale = context.localeName;
+        final text = Theme.of(context).textTheme;
+        final forecast = place.city.forecast;
+        final current = forecast?.current;
+
+        final scene = current == null
+            ? const SkyScene(SkyKind.overcast, night: false)
+            : SkyScene.from(weatherCode: current.weatherCode, isDay: current.isDay);
+        final code = current == null ? null : WeatherCode.decode(code: current.weatherCode, isNight: !current.isDay);
+        final today = forecast?.today();
+        final hours = forecast?.upcomingHours(compact ? 4 : 6) ?? const [];
+
+        const white = Colors.white;
+        final soft = Colors.white.withValues(alpha: 0.82);
+
+        final subtitle = [
+            if (place.isCurrentLocation) place.approximate ? l10n.approximateLocation : l10n.yourLocation,
+            if (forecast != null) formatClock(forecast.localNow(), locale),
+        ].join(" · ");
+
+        return Semantics(
+            button: true,
+            label: [
+                place.city.name,
+                if (current != null) l10n.semanticsCurrent("${roundTemp(current.temperature.value)}", code!.describe(l10n)),
+            ].join(", "),
+            child: DecoratedBox(
+                decoration: BoxDecoration(
+                    gradient: SkyPalette.of(scene),
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: [BoxShadow(color: SkyPalette.of(scene).colors.first.withValues(alpha: 0.25), blurRadius: 12, offset: const Offset(0, 4))],
+                ),
+                child: Material(
+                    type: MaterialType.transparency,
+                    borderRadius: BorderRadius.circular(24),
+                    clipBehavior: Clip.antiAlias,
+                    child: InkWell(
+                        onTap: () => context.read<MainCubit>().showPlace(place.key),
+                        child: DefaultTextStyle.merge(
+                            style: const TextStyle(color: white, shadows: _shadow),
+                            child: Padding(
+                                padding: EdgeInsets.fromLTRB(compact ? 14 : 18, compact ? 12 : 16, compact ? 6 : 8, compact ? 12 : 16),
+                                child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                                    Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                        Expanded(
+                                            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                                Row(children: [
+                                                    if (place.isCurrentLocation)
+                                                        const Padding(padding: EdgeInsets.only(right: 6), child: Icon(Icons.near_me, size: 16, color: white, shadows: _shadow)),
+                                                    Flexible(
+                                                        child: Text(
+                                                            place.city.name,
+                                                            maxLines: 1,
+                                                            overflow: TextOverflow.ellipsis,
+                                                            style: (compact ? text.titleMedium : text.titleLarge)?.copyWith(color: white, fontWeight: FontWeight.w600, shadows: _shadow),
+                                                        ),
+                                                    ),
+                                                ]),
+                                                if (subtitle.isNotEmpty)
+                                                    Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis, style: text.bodySmall?.copyWith(color: soft, fontWeight: FontWeight.w500)),
+                                                SizedBox(height: compact ? 10 : 18),
+                                                Text(
+                                                    code?.describe(l10n) ?? l10n.forecastUnavailable,
+                                                    maxLines: 1,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: text.bodyMedium?.copyWith(color: white, fontWeight: FontWeight.w600),
+                                                ),
+                                            ]),
+                                        ),
+                                        if (code != null)
+                                            Padding(
+                                                padding: const EdgeInsets.only(top: 2),
+                                                child: SvgPicture.asset(code.image, width: compact ? 40 : 52, height: compact ? 40 : 52),
+                                            ),
+                                        const SizedBox(width: 4),
+                                        Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+                                            Text(
+                                                current == null ? "--" : "${roundTemp(current.temperature.value)}°",
+                                                style: (compact ? text.headlineLarge : text.displaySmall)?.copyWith(color: white, fontWeight: FontWeight.w300, height: 1.0, shadows: _shadow),
+                                            ),
+                                            if (today != null)
+                                                Padding(
+                                                    padding: const EdgeInsets.only(top: 6),
+                                                    child: Text(
+                                                        l10n.widgetRange("${roundTemp(today.temperatureMax.value)}°", "${roundTemp(today.temperatureMin.value)}°"),
+                                                        style: text.labelMedium?.copyWith(color: soft, fontWeight: FontWeight.w600),
+                                                    ),
+                                                ),
+                                        ]),
+                                        _Menu(place: place, onRemove: onRemove),
+                                    ]),
+                                    if (place.status.isLoading)
+                                        Padding(
+                                            padding: const EdgeInsets.only(top: 10, right: 10),
+                                            child: LinearProgressIndicator(minHeight: 2, color: white, backgroundColor: white.withValues(alpha: 0.2)),
+                                        ),
+                                    if (forecast != null && hours.isNotEmpty) ...[
+                                        Padding(
+                                            padding: EdgeInsets.only(top: compact ? 10 : 14, bottom: compact ? 8 : 10, right: 10),
+                                            child: Divider(height: 1, color: white.withValues(alpha: 0.25)),
+                                        ),
+                                        Padding(
+                                            padding: const EdgeInsets.only(right: 10),
+                                            // Hours are visual detail; the forecast page reads them out properly.
+                                            child: ExcludeSemantics(child: Row(children: [
+                                                for (final hour in hours)
+                                                    Expanded(
+                                                        child: Column(children: [
+                                                            Text(formatHour(hour.time, locale), maxLines: 1, style: text.labelSmall?.copyWith(color: soft)),
+                                                            const SizedBox(height: 4),
+                                                            SvgPicture.asset(WeatherCode.decode(code: hour.weatherCode, isNight: forecast.isNight(hour)).image, height: compact ? 24 : 28),
+                                                            const SizedBox(height: 2),
+                                                            Text("${roundTemp(hour.temperature.value)}°", style: text.labelLarge?.copyWith(color: white, fontWeight: FontWeight.w600)),
+                                                        ]),
+                                                    ),
+                                            ])),
+                                        ),
+                                    ],
+                                    if (forecast == null && place.status.isFailure)
+                                        Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: TextButton.icon(
+                                                style: TextButton.styleFrom(foregroundColor: white),
+                                                onPressed: () => context.read<WeatherCubit>().refreshPlace(place.key),
+                                                icon: const Icon(Icons.refresh, size: 18),
+                                                label: Text(l10n.retry),
+                                            ),
+                                        ),
+                                ]),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        );
+    }
+}
+
+/// "⋮" menu on saved cities (the user's own location can't be removed).
+class _Menu extends StatelessWidget {
+    final CityState place;
+    final VoidCallback? onRemove;
+
+    const _Menu({ required this.place, this.onRemove });
+
+    @override
+    Widget build(BuildContext context) {
+        final remove = onRemove;
+        if (remove == null) return const SizedBox(width: 10);
+
+        return PopupMenuButton<String>(
+            tooltip: MaterialLocalizations.of(context).showMenuTooltip,
+            icon: const Icon(Icons.more_vert, color: Colors.white),
+            padding: EdgeInsets.zero,
+            iconSize: 20,
+            onSelected: (_) => remove(),
+            itemBuilder: (context) => [
+                PopupMenuItem(
+                    value: "remove",
+                    child: Row(children: [
+                        Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.error),
+                        const SizedBox(width: 12),
+                        Text(context.l10n.removeCity(place.city.name)),
+                    ]),
+                ),
+            ],
         );
     }
 }

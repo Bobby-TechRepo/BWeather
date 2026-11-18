@@ -1,6 +1,6 @@
 {
-    "name": "bweatherflutter",
-    "short_name": "bweatherflutter",
+    "name": "bweather",
+    "short_name": "bweather",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

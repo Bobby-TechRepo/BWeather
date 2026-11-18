@@ -1,0 +1,19 @@
+BWeather te da un pronóstico claro y rápido para donde estás y los lugares que te importan. Gratis, sin anuncios y sin cuenta.
+
+• Tiempo actual, pronóstico por horas y a 7 días, con gráfico
+• Comparación con los últimos 20 años: «más cálido de lo habitual»
+• Lluvia minuto a minuto para las próximas 2 horas (opcional)
+• Radar de lluvia de las últimas 2 horas
+• Calidad del aire, índice UV y polen
+• Amanecer, atardecer, duración del día y fase lunar
+• Consejos del día: paraguas, ropa, protector solar, colada, conducción
+• Resumen matinal, avisos de lluvia y de tiempo severo
+• Widget para la pantalla de inicio
+• Cielos animados, temas claro y oscuro
+• Guarda, reordena y elimina ciudades con un gesto
+• Para teléfonos y tabletas
+• En inglés, francés, español, chino, japonés, hausa, yoruba e igbo
+
+Privacidad ante todo: tu ubicación solo se usa para obtener el pronóstico. Tus lugares se quedan en tu dispositivo.
+
+Datos meteorológicos de Open-Meteo (CC BY 4.0). Radar de RainViewer. Mapas © colaboradores de OpenStreetMap.

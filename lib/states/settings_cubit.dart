@@ -1,118 +1,158 @@
-import 'dart:convert';
 import 'dart:developer';
 
+import 'package:bweather/services/alerts.dart';
+import 'package:bweather/services/crash_reporting.dart';
 import 'package:bweather_repository/bweather_repository.dart';
-import 'package:bweatherflutter/states/weather_cubit.dart';
-import 'package:flutter/material.dart';
+import 'package:equatable/equatable.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-class SettingsState {
-    final TempUnit temp_unit;
-    final WindSpeedUnit wind_speed_unit;
-    final PrecipitationUnit precipitation_unit;
+class SettingsState extends Equatable {
+    final TempUnit tempUnit;
+    final WindSpeedUnit windSpeedUnit;
+    final PrecipitationUnit precipitationUnit;
 
+    /// "auto", "light" or "dark".
     final String themeMode;
-    ThemeMode get themeModeValue{
-        switch(themeMode){
+
+    /// App language code ("en", "fr"), or "" to follow the device.
+    final String languageCode;
+
+    /// Notification preferences.
+    final AlertPrefs alerts;
+
+    /// Minute-by-minute (15-minute) rain for the next 2 hours. Off by default
+    /// because it makes every forecast request a little larger.
+    final bool minuteRain;
+
+    /// Animated sky behind the forecast. Also off when the system asks for reduced motion.
+    final bool animatedBackground;
+
+    /// Send anonymous crash reports (only when the build has a Sentry DSN).
+    final bool crashReports;
+
+    /// Locale override for MaterialApp; null follows the device.
+    Locale? get locale => languageCode.isEmpty ? null : Locale(languageCode);
+
+    /// "light" and "dark" are fixed; "auto" follows the time of day ([isDay]).
+    ThemeMode themeModeFor({ required bool isDay }) {
+        switch (themeMode) {
             case "light":
                 return ThemeMode.light;
             case "dark":
                 return ThemeMode.dark;
         }
-        return ThemeMode.system;
+        return isDay ? ThemeMode.light : ThemeMode.dark;
     }
 
+    Units get units => Units(tempUnit: tempUnit, windSpeedUnit: windSpeedUnit, precipitationUnit: precipitationUnit);
+
     const SettingsState({
-        this.temp_unit = TempUnit.celsius, this.wind_speed_unit = WindSpeedUnit.ms,
-        this.precipitation_unit = PrecipitationUnit.mm, this.themeMode = "auto"
+        this.tempUnit = TempUnit.celsius, this.windSpeedUnit = WindSpeedUnit.kmh,
+        this.precipitationUnit = PrecipitationUnit.mm, this.themeMode = "auto", this.languageCode = "",
+        this.alerts = const AlertPrefs(), this.minuteRain = false, this.animatedBackground = true, this.crashReports = true,
     });
 
-    SettingsState copy({ TempUnit? temp_unit, WindSpeedUnit? wind_speed_unit, PrecipitationUnit? precipitation_unit, String? themeMode }){
+    SettingsState copy({ TempUnit? tempUnit, WindSpeedUnit? windSpeedUnit, PrecipitationUnit? precipitationUnit, String? themeMode, String? languageCode, AlertPrefs? alerts, bool? minuteRain, bool? animatedBackground, bool? crashReports }) {
         return SettingsState(
-            temp_unit: temp_unit ?? this.temp_unit,
-            wind_speed_unit: wind_speed_unit ?? this.wind_speed_unit,
-            precipitation_unit: precipitation_unit ?? this.precipitation_unit,
-            themeMode: themeMode ?? this.themeMode
+            tempUnit: tempUnit ?? this.tempUnit,
+            windSpeedUnit: windSpeedUnit ?? this.windSpeedUnit,
+            precipitationUnit: precipitationUnit ?? this.precipitationUnit,
+            themeMode: themeMode ?? this.themeMode,
+            languageCode: languageCode ?? this.languageCode,
+            alerts: alerts ?? this.alerts,
+            minuteRain: minuteRain ?? this.minuteRain,
+            animatedBackground: animatedBackground ?? this.animatedBackground,
+            crashReports: crashReports ?? this.crashReports,
         );
     }
 
-    factory SettingsState.fromJson(dynamic json) {
+    factory SettingsState.fromJson(Map<String, dynamic> json) {
+        const defaults = SettingsState();
+        T read<T>(String key, T Function(String value) parse, T fallback) {
+            try {
+                return json[key] == null ? fallback : parse(json[key].toString());
+            } catch (_) {
+                return fallback;
+            }
+        }
+
         return SettingsState(
-            temp_unit: json["temp_unit"].toString().tempUnit,
-            wind_speed_unit: json["wind_speed_unit"].toString().windSpeedUnit,
-            precipitation_unit: json["precipitation_unit"].toString().precipitationUnit,
-            themeMode: json["themeMode"].toString());
+            tempUnit: read("temp_unit", (value) => value.tempUnit, defaults.tempUnit),
+            windSpeedUnit: read("wind_speed_unit", (value) => value.windSpeedUnit, defaults.windSpeedUnit),
+            precipitationUnit: read("precipitation_unit", (value) => value.precipitationUnit, defaults.precipitationUnit),
+            themeMode: read("themeMode", (value) => const ["auto", "light", "dark"].contains(value) ? value : "auto", defaults.themeMode),
+            languageCode: read("language", (value) => supportedLanguages.contains(value) ? value : "", defaults.languageCode),
+            alerts: AlertPrefs.fromJson(json["alerts"]),
+            minuteRain: read("minute_rain", (value) => value == "true", defaults.minuteRain),
+            animatedBackground: read("animated_background", (value) => value == "true", defaults.animatedBackground),
+            crashReports: read(crashReportsKey, (value) => value == "true", defaults.crashReports),
+        );
     }
 
     Map<String, dynamic> toJson() => {
-        "temp_unit" : temp_unit.serialize, "wind_speed_unit": wind_speed_unit.serialize,
-        "precipitation_unit": precipitation_unit.serialize, "themeMode" : themeMode,
+        "temp_unit" : tempUnit.serialize, "wind_speed_unit": windSpeedUnit.serialize,
+        "precipitation_unit": precipitationUnit.serialize, "themeMode" : themeMode, "language": languageCode,
+        "alerts": alerts.toJson(), "minute_rain": minuteRain, "animated_background": animatedBackground,
+        crashReportsKey: crashReports,
     };
 
-    String serialize() => jsonEncode(toJson());
+    /// Also read directly from storage in main(), before the cubits exist.
+    static const crashReportsKey = "crash_reports";
+
+    /// Languages with translations (keep in sync with lib/l10n/app_*.arb).
+    static const supportedLanguages = ["en", "fr", "es", "zh", "ja", "ha", "yo", "ig"];
+
+    @override
+    List<Object?> get props => [tempUnit, windSpeedUnit, precipitationUnit, themeMode, languageCode, alerts, minuteRain, animatedBackground, crashReports];
 }
 
-class SettingsCubit extends HydratedCubit<SettingsState>{
-    WeatherCubit? __weatherCubit;
-    set weatherCubit(WeatherCubit weatherCubit){
-        __weatherCubit = weatherCubit;
+/// User preferences. Other cubits react to changes by listening to [stream];
+/// this cubit knows nothing about them.
+class SettingsCubit extends HydratedCubit<SettingsState> {
+    SettingsCubit(): super(const SettingsState()) {
+        CrashReporting.enabled = state.crashReports;
     }
+
+    /// Fixed storage key. The default is the class name, which changes in
+    /// obfuscated release builds and would lose saved settings on update.
+    static const storageKey = 'SettingsCubit';
+
+    @override
+    String get storagePrefix => storageKey;
 
     String get themeMode => state.themeMode;
-    set themeMode(String mode){
-        if(state.themeMode != mode){
-            emit(state.copy(themeMode: mode));
-        }
+    set themeMode(String mode) => emit(state.copy(themeMode: mode));
+
+    set languageCode(String code) => emit(state.copy(languageCode: code));
+
+    set alerts(AlertPrefs alerts) => emit(state.copy(alerts: alerts));
+
+    set minuteRain(bool enabled) => emit(state.copy(minuteRain: enabled));
+
+    set animatedBackground(bool enabled) => emit(state.copy(animatedBackground: enabled));
+
+    set crashReports(bool enabled) {
+        CrashReporting.enabled = enabled;
+        emit(state.copy(crashReports: enabled));
     }
 
-    set tempUnit(TempUnit unit){
-        if(state.temp_unit != unit){
-            emit(state.copy(temp_unit: unit));
-            if(__weatherCubit != null){
-                __weatherCubit!.reload(force: true);
-            }
-        }
-    }
+    set tempUnit(TempUnit unit) => emit(state.copy(tempUnit: unit));
 
-    set windSpeedUnit (WindSpeedUnit unit){
-        if(state.wind_speed_unit != unit){
-            emit(state.copy(wind_speed_unit: unit));
-            if(__weatherCubit != null){
-                __weatherCubit!.reload(force: true);
-            }
-        }
-    }
+    set windSpeedUnit(WindSpeedUnit unit) => emit(state.copy(windSpeedUnit: unit));
 
-    set precipitationUnit(PrecipitationUnit unit){
-        if(state.precipitation_unit != unit){
-            emit(state.copy(precipitation_unit: unit));
-            if(__weatherCubit != null){
-                __weatherCubit!.reload(force: true);
-            }
-        }
-    }
-
-    bool get hasExistingData => HydratedBloc.storage.read(runtimeType.toString()) != null;
-
-    SettingsCubit(): super(const SettingsState());
+    set precipitationUnit(PrecipitationUnit unit) => emit(state.copy(precipitationUnit: unit));
 
     @override
     SettingsState? fromJson(Map<String, dynamic> json) {
-        try{
+        try {
             return SettingsState.fromJson(json);
-        }catch(err){
+        } catch (err) {
             log("Settings State deserialization error", error: err);
         }
         return null;
     }
 
     @override
-    Map<String, dynamic>? toJson(SettingsState state) {
-        try{
-            return state.toJson();
-        }catch(err){
-            log("Settings State serialization error", error: err);
-        }
-        return null;
-    }
+    Map<String, dynamic>? toJson(SettingsState state) => state.toJson();
 }

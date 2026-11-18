@@ -1,34 +1,38 @@
+import 'package:bweather/l10n/l10n.dart';
+import 'package:bweather/utils/utils.dart';
+import 'package:bweather/utils/weather_codes.dart';
 import 'package:bweather_repository/bweather_repository.dart';
-import 'package:bweatherflutter/utils/weather_codes.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class HourlyView extends StatefulWidget{
+class HourlyView extends StatelessWidget {
     final Hourly hourly;
+    final bool isNight;
 
-    const HourlyView({super.key, required this.hourly });
+    /// Overrides the hour, e.g. "Now".
+    final String? label;
 
-  @override
-  State<HourlyView> createState() => _HourlyViewState();
-}
-
-class _HourlyViewState extends State<HourlyView> {
+    const HourlyView({ super.key, required this.hourly, required this.isNight, this.label });
 
     @override
     Widget build(BuildContext context) {
-        final ColorScheme theme = Theme.of(context).colorScheme;
+        final colors = Theme.of(context).colorScheme;
+        final l10n = context.l10n;
+        final weatherCode = WeatherCode.decode(code: hourly.weatherCode, isNight: isNight);
+        final temp = roundTemp(hourly.temperature.value);
+        final title = label ?? formatHour(hourly.time, context.localeName);
+        final rainChance = hourly.precipitationProbability.value;
 
-        int weatherCode = widget.hourly.weather_code;
-        int temp = widget.hourly.temperature.value.ceil();
-        String tempUnit = widget.hourly.temperature.unit;
-
-        return Column(
-            mainAxisAlignment: MainAxisAlignment.center, mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-                Text("${widget.hourly.time.hour}:00", style: TextStyle(color: theme.onSurface, fontWeight: FontWeight.bold),),
-                SvgPicture.asset(WeatherCode.decode(code: weatherCode, isNight: widget.hourly.time.hour >= 18).image, height: 90, width: 100,),
-                Text("$temp$tempUnit", style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w300, color: Colors.blueGrey)),
-            ],
+        return Semantics(
+            label: "$title: ${weatherCode.describe(l10n)}, $temp${hourly.temperature.unit}, ${l10n.semanticsRainChance(rainChance)}",
+            excludeSemantics: true,
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+                Text(title, style: TextStyle(color: colors.onSurface, fontWeight: FontWeight.bold)),
+                SvgPicture.asset(weatherCode.image, height: 80, width: 90),
+                Text("$temp${hourly.temperature.unit}", style: TextStyle(fontSize: 19, fontWeight: FontWeight.w400, color: colors.onSurfaceVariant)),
+                if (rainChance > 0)
+                    Text("💧 $rainChance${hourly.precipitationProbability.unit}", style: TextStyle(fontSize: 12, color: colors.primary)),
+            ]),
         );
     }
 }

@@ -1,0 +1,19 @@
+BWeather gives you a clear, fast forecast for where you are and the places you care about. It's free, with no ads and no account.
+
+• Current conditions, hourly and 7-day forecasts, with a temperature and rain chart
+• "Warmer than usual" comparisons with the last 20 years
+• Minute-by-minute rain for the next 2 hours (optional)
+• Rain radar for the past 2 hours
+• Air quality, UV index and pollen
+• Sunrise, sunset, day length and moon phase
+• Daily tips: umbrella, what to wear, sunscreen, laundry, driving
+• Morning briefing, rain alerts and severe-weather alerts
+• Home-screen widget
+• Animated sky backgrounds, light and dark themes
+• Save cities, reorder them, and swipe to remove
+• Works on phones and tablets
+• In English, French, Spanish, Chinese, Japanese, Hausa, Yorùbá and Igbo
+
+Privacy first: your location is only used to fetch the forecast. Saved places stay on your device.
+
+Weather data by Open-Meteo (CC BY 4.0). Radar by RainViewer. Maps © OpenStreetMap contributors.

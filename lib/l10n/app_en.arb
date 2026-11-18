@@ -1,0 +1,759 @@
+{
+  "@@locale": "en",
+  "appTitle": "BWeather",
+  "navForecast": "Forecast",
+  "navLocations": "Locations",
+  "navSettings": "Settings",
+  "addCity": "Add a city",
+  "searchHint": "Search cities",
+  "clearSearch": "Clear search",
+  "close": "Close",
+  "retry": "Retry",
+  "keepTyping": "Keep typing…",
+  "searchFailed": "Search failed. Check your internet connection and try again.",
+  "noPlacesMatch": "No places match \"{query}\".",
+  "@noPlacesMatch": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeTitle": "Welcome to BWeather",
+  "welcomeSubtitle": "Forecasts for where you are and the places you care about.",
+  "useMyLocation": "Use my location",
+  "findingYou": "Finding you…",
+  "openSettings": "Open settings",
+  "continueWith": "Continue with {place}",
+  "@continueWith": {
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "approximateFromNetwork": "Approximate, based on your network",
+  "searchForCity": "Search for a city",
+  "locationPrivacyNote": "Your location is only used to fetch the forecast.",
+  "locationServiceDisabled": "Location services are turned off.",
+  "locationPermissionDenied": "Location permission wasn't granted.",
+  "locationPermissionBlocked": "Location permission is blocked. You can allow it in Settings.",
+  "locationUnavailable": "We couldn't find your location right now.",
+  "approximateBanner": "Showing an approximate location based on your network.",
+  "usePrecise": "Use precise",
+  "noPlacesTitle": "No places yet",
+  "noPlacesBody": "Use your location or add a city to see its forecast.",
+  "noSavedPlaces": "No saved places yet. Tap + to add a city.",
+  "yourLocation": "Your location",
+  "approximateLocation": "Approximate location",
+  "removeCity": "Remove {city}",
+  "@removeCity": {
+    "placeholders": {
+      "city": {
+        "type": "String"
+      }
+    }
+  },
+  "reorderHint": "Long-press and drag a city to reorder.",
+  "forecastLoadFailed": "Couldn't load the forecast for {city}.",
+  "@forecastLoadFailed": {
+    "placeholders": {
+      "city": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastUnavailable": "Couldn't load forecast",
+  "forecastErrorNetwork": "Couldn't reach the weather service. Check your connection and try again.",
+  "forecastErrorData": "The weather service sent data we couldn't read. Please try again later.",
+  "couldNotRefresh": "Couldn't refresh",
+  "updatedAgo": "Updated {age}",
+  "@updatedAgo": {
+    "placeholders": {
+      "age": {
+        "type": "String"
+      }
+    }
+  },
+  "ageJustNow": "just now",
+  "ageMinutes": "{count} min ago",
+  "@ageMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ageHours": "{count} h ago",
+  "@ageHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ageDays": "{count, plural, =1{1 day ago} other{{count} days ago}}",
+  "@ageDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "feelsLike": "Feels like {temperature}",
+  "@feelsLike": {
+    "placeholders": {
+      "temperature": {
+        "type": "String"
+      }
+    }
+  },
+  "rainChance": "Rain chance",
+  "windWithDirection": "Wind {direction}",
+  "@windWithDirection": {
+    "placeholders": {
+      "direction": {
+        "type": "String"
+      }
+    }
+  },
+  "humidity": "Humidity",
+  "daily": "Daily",
+  "hourly": "Hourly",
+  "today": "Today",
+  "now": "Now",
+  "windDirection": "Wind direction",
+  "windGusts": "Wind gusts",
+  "rainToday": "Rain today",
+  "pressure": "Pressure",
+  "cloudCover": "Cloud cover",
+  "dewPoint": "Dew point",
+  "sunrise": "Sunrise",
+  "sunset": "Sunset",
+  "semanticsCurrent": "{temperature} degrees, {condition}",
+  "@semanticsCurrent": {
+    "placeholders": {
+      "temperature": {
+        "type": "String"
+      },
+      "condition": {
+        "type": "String"
+      }
+    }
+  },
+  "semanticsDay": "{day}: {condition}, {min} to {max}",
+  "@semanticsDay": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "condition": {
+        "type": "String"
+      },
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "semanticsRainChance": "{percent}% chance of rain",
+  "@semanticsRainChance": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "compassPoints": "N,NNE,NE,ENE,E,ESE,SE,SSE,S,SSW,SW,WSW,W,WNW,NW,NNW",
+  "@compassPoints": {
+    "description": "16 compass points, comma separated, starting at north and going clockwise."
+  },
+  "settingsGeneral": "General",
+  "settingsTheme": "Theme",
+  "themeAuto": "Auto",
+  "themeAutoHint": "Light from sunrise to sunset, dark at night",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "settingsLanguage": "Language",
+  "languageSystem": "System default",
+  "settingsTemperature": "Temperature",
+  "unitCelsius": "Celsius (°C)",
+  "unitFahrenheit": "Fahrenheit (°F)",
+  "settingsWindSpeed": "Wind speed",
+  "unitKmh": "Kilometres per hour (km/h)",
+  "unitMph": "Miles per hour (mph)",
+  "unitMs": "Metres per second (m/s)",
+  "unitKnots": "Knots (kn)",
+  "settingsPrecipitation": "Precipitation",
+  "unitMm": "Millimetres (mm)",
+  "unitInch": "Inches (in)",
+  "settingsAbout": "About",
+  "aboutApp": "About BWeather",
+  "privacyPolicy": "Privacy policy",
+  "termsOfUse": "Terms of use",
+  "version": "Version {version}",
+  "@version": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "aboutDescription": "BWeather shows the current weather and forecasts for your location and the places you save. It is developed and maintained by Nobel for Bsoft Limited.",
+  "aboutDataSources": "Data sources",
+  "aboutOpenMeteo": "Weather and place search: Open-Meteo (open-meteo.com), licensed under CC BY 4.0.",
+  "aboutOsm": "Place names: © OpenStreetMap contributors (Nominatim), ODbL.",
+  "aboutIpapi": "Approximate location: ipapi.co.",
+  "aboutIcons": "Weather icons: Meteocons by Bas Milius (MIT).",
+  "privacyIntro": "BWeather has no accounts, no ads and no analytics. This page explains which data leaves your device and why.",
+  "privacyLocationTitle": "Your location",
+  "privacyLocationBody": "If you allow it, the app reads your device's location. The coordinates are sent to Open-Meteo to get the forecast and to OpenStreetMap Nominatim to get the name of the place. They are not sent anywhere else.",
+  "privacyApproximateTitle": "Approximate location",
+  "privacyApproximateBody": "When precise location isn't available, the app asks ipapi.co for an approximate, city-level location. ipapi.co sees your IP address to answer this request.",
+  "privacySearchTitle": "City search",
+  "privacySearchBody": "The text you type in the city search is sent to Open-Meteo's geocoding service to find matching places.",
+  "privacyStorageTitle": "Data stored on your device",
+  "privacyStorageBody": "Your saved cities, the latest forecasts and your settings are stored only on this device. Uninstalling the app deletes them.",
+  "privacyContactTitle": "Contact",
+  "privacyContactBody": "Questions about privacy? Contact Bsoft Limited through the app's store listing.",
+  "termsIntro": "By using BWeather you agree to these terms.",
+  "termsAccuracyTitle": "Forecast accuracy",
+  "termsAccuracyBody": "Forecasts are estimates and can be wrong. Don't rely on BWeather for decisions where safety is at stake; follow official warnings from your national weather service.",
+  "termsServiceTitle": "The service",
+  "termsServiceBody": "BWeather is provided \"as is\", without warranties. Features may change, and the service may be unavailable at times.",
+  "termsThirdPartyTitle": "Third-party data",
+  "termsThirdPartyBody": "Weather data comes from Open-Meteo and place names from OpenStreetMap. Their own terms and licences apply to that data.",
+  "legalLastUpdated": "Last updated: {date}",
+  "@legalLastUpdated": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "wmo0": "Clear sky",
+  "wmo1": "Mainly clear",
+  "wmo2": "Partly cloudy",
+  "wmo3": "Overcast",
+  "wmo45": "Fog",
+  "wmo48": "Rime fog",
+  "wmo51": "Light drizzle",
+  "wmo53": "Moderate drizzle",
+  "wmo55": "Dense drizzle",
+  "wmo56": "Light freezing drizzle",
+  "wmo57": "Dense freezing drizzle",
+  "wmo61": "Light rain",
+  "wmo63": "Moderate rain",
+  "wmo65": "Heavy rain",
+  "wmo66": "Light freezing rain",
+  "wmo67": "Heavy freezing rain",
+  "wmo71": "Light snowfall",
+  "wmo73": "Moderate snowfall",
+  "wmo75": "Heavy snowfall",
+  "wmo77": "Snow grains",
+  "wmo80": "Light rain showers",
+  "wmo81": "Moderate rain showers",
+  "wmo82": "Violent rain showers",
+  "wmo85": "Light snow showers",
+  "wmo86": "Heavy snow showers",
+  "wmo95": "Thunderstorm",
+  "wmo96": "Thunderstorm with light hail",
+  "wmo99": "Thunderstorm with heavy hail",
+  "wmoUnknown": "Unknown conditions",
+  "pageNotFound": "Page not found",
+  "airQuality": "Air quality",
+  "airQualityIndex": "US AQI {value}",
+  "@airQualityIndex": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "aqiGood": "Good",
+  "aqiModerate": "Moderate",
+  "aqiSensitive": "Unhealthy for sensitive groups",
+  "aqiUnhealthy": "Unhealthy",
+  "aqiVeryUnhealthy": "Very unhealthy",
+  "aqiHazardous": "Hazardous",
+  "pm25": "PM2.5",
+  "pm10": "PM10",
+  "dust": "Dust",
+  "uvIndex": "UV index",
+  "uvLow": "Low",
+  "uvModerate": "Moderate",
+  "uvHigh": "High",
+  "uvVeryHigh": "Very high",
+  "uvExtreme": "Extreme",
+  "pollen": "Pollen",
+  "pollenAlder": "Alder",
+  "pollenBirch": "Birch",
+  "pollenGrass": "Grass",
+  "pollenMugwort": "Mugwort",
+  "pollenOlive": "Olive",
+  "pollenRagweed": "Ragweed",
+  "harmattanDustHint": "High dust levels: consider a mask outdoors.",
+  "chart": "Chart",
+  "chartLegendTemperature": "Temperature",
+  "chartLegendRain": "Rain chance",
+  "settingsNotifications": "Notifications",
+  "notifyMorningBrief": "Morning briefing",
+  "notifyMorningBriefDetail": "Today's forecast for your location each morning.",
+  "notifyBriefTime": "Time",
+  "notifyRain": "Rain alerts",
+  "notifyRainDetail": "When rain is likely within the next 2 hours.",
+  "notifySevere": "Severe weather",
+  "notifySevereDetail": "Thunderstorms, very strong winds or extreme heat.",
+  "notifyPermissionDenied": "Notifications are turned off for BWeather in your device settings.",
+  "notifyUnsupported": "Notifications are available in the Android app.",
+  "notifyBackgroundNote": "Alerts are checked about once an hour, so they can arrive a little late.",
+  "notifyChannelForecast": "Forecasts",
+  "@notifyChannelForecast": {
+    "description": "Android notification channel name."
+  },
+  "notifyChannelAlerts": "Weather alerts",
+  "@notifyChannelAlerts": {
+    "description": "Android notification channel name."
+  },
+  "briefTitle": "Today in {place}",
+  "@briefTitle": {
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "briefBody": "{condition}, {min} to {max}. Rain chance {rain}%.",
+  "@briefBody": {
+    "placeholders": {
+      "condition": {
+        "type": "String"
+      },
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      },
+      "rain": {
+        "type": "int"
+      }
+    }
+  },
+  "rainAlertTitle": "Rain expected in {place}",
+  "@rainAlertTitle": {
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "rainAlertBody": "{percent}% chance of rain around {time}.",
+  "@rainAlertBody": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "severeThunderTitle": "Thunderstorms near {place}",
+  "@severeThunderTitle": {
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "severeThunderBody": "Thunderstorms are expected around {time}. Stay indoors if you can.",
+  "@severeThunderBody": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "severeWindTitle": "Strong winds in {place}",
+  "@severeWindTitle": {
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "severeWindBody": "Gusts up to {speed} expected today.",
+  "@severeWindBody": {
+    "placeholders": {
+      "speed": {
+        "type": "String"
+      }
+    }
+  },
+  "severeHeatTitle": "Extreme heat in {place}",
+  "@severeHeatTitle": {
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "severeHeatBody": "It will feel like {temperature} today. Drink water and avoid the midday sun.",
+  "@severeHeatBody": {
+    "placeholders": {
+      "temperature": {
+        "type": "String"
+      }
+    }
+  },
+  "aboutCams": "Air quality: generated using Copernicus Atmosphere Monitoring Service information (via Open-Meteo).",
+  "widgetRange": "H {max} · L {min}",
+  "@widgetRange": {
+    "placeholders": {
+      "max": {
+        "type": "String"
+      },
+      "min": {
+        "type": "String"
+      }
+    }
+  },
+  "widgetUpdated": "Updated {time}",
+  "@widgetUpdated": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "tipsTitle": "Today's tips",
+  "tipUmbrella": "Take an umbrella: {percent}% chance of rain, most likely around {time}.",
+  "@tipUmbrella": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "tipClothesHot": "Wear light, breathable clothes.",
+  "tipClothesWarm": "T-shirt weather.",
+  "tipClothesMild": "Bring a light jacket.",
+  "tipClothesCool": "Wear a warm jacket.",
+  "tipClothesCold": "Bundle up: it's cold out.",
+  "tipSunscreen": "UV is {level} today: use sunscreen and a hat between 10:00 and 16:00.",
+  "@tipSunscreen": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "tipHydrate": "It will feel like {temperature}. Drink plenty of water.",
+  "@tipHydrate": {
+    "placeholders": {
+      "temperature": {
+        "type": "String"
+      }
+    }
+  },
+  "tipLaundryGood": "Good day to dry laundry outside.",
+  "tipLaundryBad": "Not a good day to dry laundry outside.",
+  "tipBestOutdoorTime": "Best time to be outdoors: around {time}.",
+  "@tipBestOutdoorTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "tipAirQuality": "Air quality is poor: limit long or intense activity outdoors.",
+  "tipMosquitoes": "Warm, humid evening: mosquitoes are likely, so use repellent or a net.",
+  "tipDriveFog": "Drive carefully: fog expected around {time}.",
+  "@tipDriveFog": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "tipDriveRain": "Drive carefully: heavy rain expected around {time}.",
+  "@tipDriveRain": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "refresh": "Refresh",
+  "settingsDisplay": "Display & data",
+  "settingsAnimatedBackground": "Animated backgrounds",
+  "settingsAnimatedBackgroundDetail": "A moving sky behind the forecast. Stays still when your device is set to reduce motion.",
+  "settingsMinuteRain": "Minute-by-minute rain",
+  "settingsMinuteRainDetail": "Rain for the next 2 hours in 15-minute steps. Uses slightly more data.",
+  "settingsCrashReports": "Send crash reports",
+  "settingsCrashReportsDetail": "Anonymous error details that help fix bugs. No location or personal data.",
+  "nextTwoHours": "Next 2 hours",
+  "rainStartingIn": "Rain starting in about {minutes} min",
+  "@rainStartingIn": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "rainStoppingIn": "Rain stopping in about {minutes} min",
+  "@rainStoppingIn": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "rainContinuing": "Rain for at least the next 2 hours",
+  "noRainSoon": "No rain expected in the next 2 hours",
+  "tempAboutNormal": "About normal for today",
+  "tempWarmerThanUsual": "{degrees}° warmer than usual",
+  "@tempWarmerThanUsual": {
+    "placeholders": {
+      "degrees": {
+        "type": "int"
+      }
+    }
+  },
+  "tempCoolerThanUsual": "{degrees}° cooler than usual",
+  "@tempCoolerThanUsual": {
+    "placeholders": {
+      "degrees": {
+        "type": "int"
+      }
+    }
+  },
+  "tempNormalsSource": "Today's high compared with the average high for this date, {fromYear}–{toYear}.",
+  "@tempNormalsSource": {
+    "placeholders": {
+      "fromYear": {
+        "type": "String"
+      },
+      "toYear": {
+        "type": "String"
+      }
+    }
+  },
+  "radar": "Rain radar",
+  "radarUnavailable": "The radar isn't available right now.",
+  "radarNoCoverage": "Radar covers the past 2 hours. Some regions have little or no coverage.",
+  "play": "Play",
+  "pause": "Pause",
+  "aboutRainViewer": "Radar: weather data by RainViewer; map © OpenStreetMap contributors.",
+  "privacyRadarTitle": "Radar map",
+  "privacyRadarBody": "Opening the radar downloads map tiles from OpenStreetMap and radar images from RainViewer for the area you view. Like any website, they see your IP address.",
+  "privacyCrashTitle": "Crash reports",
+  "privacyCrashBody": "If the app crashes, an anonymous error report (device model, OS version, app version and the error) may be sent to Sentry so we can fix it. It never includes your location, saved places or IP address. You can turn this off in Settings.",
+  "aboutHistory": "Climate averages: Open-Meteo historical weather API (ERA5).",
+  "zoomIn": "Zoom in",
+  "zoomOut": "Zoom out",
+  "settingsAppearance": "Appearance",
+  "settingsUnits": "Units",
+  "settingsPrivacy": "Privacy",
+  "cityRemoved": "{city} removed",
+  "undo": "Undo",
+  "@cityRemoved": {
+    "placeholders": {
+      "city": {
+        "type": "String"
+      }
+    }
+  },
+  "sunAndMoon": "Sun & moon",
+  "daylight": "Daylight",
+  "daylightDuration": "{hours} h {minutes} min",
+  "moonNew": "New moon",
+  "moonWaxingCrescent": "Waxing crescent",
+  "moonFirstQuarter": "First quarter",
+  "moonWaxingGibbous": "Waxing gibbous",
+  "moonFull": "Full moon",
+  "moonWaningGibbous": "Waning gibbous",
+  "moonLastQuarter": "Last quarter",
+  "moonWaningCrescent": "Waning crescent",
+  "moonIllumination": "{percent}% lit",
+  "@daylightDuration": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "@moonIllumination": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "navTrips": "Trips",
+  "tripsEmptyTitle": "No trips yet",
+  "tripsEmptyBody": "Plan a trip to see the weather at each stop, day by day.",
+  "planTrip": "Plan a trip",
+  "newTrip": "New trip",
+  "editTrip": "Edit trip",
+  "tripName": "Trip name",
+  "tripNameHint": "e.g. Christmas in Abuja",
+  "tripDefaultName": "Trip to {place}",
+  "@tripDefaultName": {
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "tripStops": "Stops",
+  "addStop": "Add a stop",
+  "removeStop": "Remove stop",
+  "chooseDates": "Choose dates",
+  "save": "Save",
+  "deleteTrip": "Delete trip",
+  "tripDeleted": "Trip deleted",
+  "tripProblemNoStops": "Add at least one stop.",
+  "tripProblemOrder": "Each stop must start on or after the day the previous one ends.",
+  "tripProblemTooLong": "Trips can be at most {days} days long.",
+  "@tripProblemTooLong": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "tripStartsIn": "{count, plural, =0{Starts today} =1{Starts tomorrow} other{Starts in {count} days}}",
+  "@tripStartsIn": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tripOngoing": "Happening now",
+  "tripEnded": "Ended",
+  "tripDayCount": "{count, plural, =1{1 day} other{{count} days}}",
+  "@tripDayCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "travelDay": "Travel day from {place}",
+  "@travelDay": {
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "typicalWeather": "Typical for the date",
+  "typicalWeatherNote": "Days more than {days} days away show typical weather for the date (the average of the last 20 years). The forecast replaces it automatically as the trip gets closer.",
+  "@typicalWeatherNote": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "weatherUnknown": "No data yet",
+  "packingList": "Packing list",
+  "packingEmpty": "Nothing special to pack for this weather.",
+  "packUmbrella": "Umbrella",
+  "packRainJacket": "Rain jacket",
+  "packSunscreen": "Sunscreen",
+  "packSunglasses": "Sunglasses",
+  "packHat": "Sun hat",
+  "packLightClothes": "Light, breathable clothes",
+  "packWaterBottle": "Reusable water bottle",
+  "packWarmLayer": "Warm sweater or fleece",
+  "packCoat": "Winter coat",
+  "packGloves": "Gloves",
+  "packWindbreaker": "Windbreaker",
+  "packInsectRepellent": "Insect repellent",
+  "shareTrip": "Share",
+  "tripReminder": "Remind me the day before",
+  "tripReminderDetail": "A notification the evening before you leave, with the forecast for your first stop.",
+  "tripReminderTitle": "Your trip to {place} starts tomorrow",
+  "@tripReminderTitle": {
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "tripReminderBodyFallback": "Check the forecast before you go.",
+  "tripOutlookRange": "{low} to {high}",
+  "@tripOutlookRange": {
+    "placeholders": {
+      "low": {
+        "type": "String"
+      },
+      "high": {
+        "type": "String"
+      }
+    }
+  },
+  "tripRainyDays": "{count, plural, =0{No rain expected} =1{Rain likely on 1 day} other{Rain likely on {count} days}}",
+  "@tripRainyDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shareForecastDay": "{day} · {place}: {condition}, {min} to {max}, rain {rain}%",
+  "@shareForecastDay": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "place": {
+        "type": "String"
+      },
+      "condition": {
+        "type": "String"
+      },
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      },
+      "rain": {
+        "type": "int"
+      }
+    }
+  },
+  "shareTypicalDay": "{day} · {place}: typically {min} to {max}",
+  "@shareTypicalDay": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "place": {
+        "type": "String"
+      },
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedFromApp": "Shared from BWeather",
+  "privacyTripsTitle": "Trips",
+  "privacyTripsBody": "The trips you plan are stored only on this device. To get their weather, the coordinates and dates of each stop are sent to Open-Meteo."
+}

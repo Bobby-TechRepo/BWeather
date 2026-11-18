@@ -1,38 +1,38 @@
+import 'package:bweather/l10n/l10n.dart';
+import 'package:bweather/utils/utils.dart';
+import 'package:bweather/utils/weather_codes.dart';
 import 'package:bweather_repository/bweather_repository.dart';
-import 'package:bweatherflutter/utils/utils.dart';
-import 'package:bweatherflutter/utils/weather_codes.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class DailyView extends StatefulWidget{
+class DailyView extends StatelessWidget {
     final Daily daily;
 
-    const DailyView({super.key,  required this.daily });
+    /// Overrides the weekday name, e.g. "Today".
+    final String? label;
 
-    @override
-    State<DailyView> createState() => _DailyViewState();
-}
-
-class _DailyViewState extends State<DailyView> {
+    const DailyView({ super.key, required this.daily, this.label });
 
     @override
     Widget build(BuildContext context) {
-        final ColorScheme theme = Theme.of(context).colorScheme;
+        final colors = Theme.of(context).colorScheme;
+        final l10n = context.l10n;
+        final weatherCode = WeatherCode.decode(code: daily.weatherCode, isNight: false);
+        final min = roundTemp(daily.temperatureMin.value), max = roundTemp(daily.temperatureMax.value);
+        final unit = daily.temperatureMax.unit;
+        final rainChance = daily.precipitationProbabilityMax;
+        final title = label ?? shortDay(daily.time, context.localeName);
 
-        int weatherCode = widget.daily.weather_code;
-        DateTime time = widget.daily.time;
-        String tempUnit = widget.daily.apparent_temperature_max.unit;
-
-        int min = widget.daily.temperature_min.value.ceil();
-        int max = widget.daily.temperature_max.value.ceil();
-
-        return Column(
-            mainAxisAlignment: MainAxisAlignment.center, mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-                Text(day(time.weekday), style: TextStyle(color: theme.onSurface, fontWeight: FontWeight.bold),),
-                SvgPicture.asset(WeatherCode.decode(code: weatherCode, isNight: false).image, width: 100, height: 90),
-                Text("$min-$max$tempUnit", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w300, color: Colors.blueGrey)),
-            ],
+        return Semantics(
+            label: "${l10n.semanticsDay(title, weatherCode.describe(l10n), "$min$unit", "$max$unit")}${rainChance == null ? "" : ", ${l10n.semanticsRainChance(rainChance.value)}"}",
+            excludeSemantics: true,
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+                Text(title, style: TextStyle(color: colors.onSurface, fontWeight: FontWeight.bold)),
+                SvgPicture.asset(weatherCode.image, width: 90, height: 80),
+                Text("$min° / $max$unit", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w400, color: colors.onSurfaceVariant)),
+                if (rainChance != null && rainChance.value > 0)
+                    Text("💧 ${rainChance.value}${rainChance.unit}", style: TextStyle(fontSize: 12, color: colors.primary)),
+            ]),
         );
     }
 }

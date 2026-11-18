@@ -1,62 +1,75 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:bweather/l10n/l10n.dart';
+import 'package:bweather/states/cities_cubit.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Search extends StatefulWidget{
-    final void Function(String query) onSearch;
-    final void Function() cleared;
+/// Search field bound to [CitiesCubit]. Every keystroke is forwarded; the
+/// cubit debounces and ignores queries shorter than 2 characters.
+class Search extends StatefulWidget {
+    final bool autofocus;
 
-    const Search({super.key, required this.onSearch, required this.cleared });
+    /// Called after the field was cleared with the ✕ button.
+    final VoidCallback? onCleared;
+
+    const Search({ super.key, this.autofocus = false, this.onCleared });
 
     @override
-    State<StatefulWidget> createState() => __SearchState();
-  
+    State<Search> createState() => _SearchState();
 }
 
-class __SearchState extends State<Search>{
-    TextEditingController textEditingController = TextEditingController();
+class _SearchState extends State<Search> {
+    late final TextEditingController _controller;
 
     @override
     void initState() {
         super.initState();
-        textEditingController.addListener(() {
-            if(textEditingController.text.isEmpty){
-                widget.cleared();
-            }else{
-                widget.onSearch(textEditingController.text);
-            }
-        });
+        _controller = TextEditingController(text: context.read<CitiesCubit>().state.query);
     }
 
-    void submitted(String? query){
-        if(query != null && query.isNotEmpty){
-            widget.onSearch(query);
-        }
+    @override
+    void dispose() {
+        _controller.dispose();
+        super.dispose();
     }
 
-    void clear(){
-        textEditingController.clear();
-        widget.cleared();
+    void _clear() {
+        _controller.clear();
+        context.read<CitiesCubit>().clear();
+        widget.onCleared?.call();
     }
 
     @override
     Widget build(BuildContext context) {
-        final ColorScheme theme = Theme.of(context).colorScheme;
+        final theme = Theme.of(context).colorScheme;
+        final cubit = context.read<CitiesCubit>();
 
-        return DecoratedBox(decoration: BoxDecoration(color: theme.surfaceContainerHigh, borderRadius: BorderRadius.circular(26)),
-          child: Padding(padding: const EdgeInsets.all(2),
-            child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisSize: MainAxisSize.max,
-              children: [
-                  Expanded(
-                      child: TextFormField( style: const TextStyle(height: 1), maxLines: 1, scrollPadding: EdgeInsets.zero, controller: textEditingController, textAlignVertical: TextAlignVertical.center,
-                          decoration: InputDecoration(
-                              prefixIconColor: theme.onSurface, suffixIconColor: theme.error,
-                              suffixIcon: IconButton(onPressed: clear, icon: const Icon(Icons.cancel)),
-                              prefixIcon: const Icon(Icons.search_outlined,),
-                              border: InputBorder.none, hintText: "Search cities"), onFieldSubmitted: submitted,),
-                  ),
-              ],
+        return DecoratedBox(
+            decoration: BoxDecoration(color: theme.surfaceContainerHigh, borderRadius: BorderRadius.circular(28)),
+            child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                child: TextField(
+                    controller: _controller,
+                    autofocus: widget.autofocus,
+                    maxLines: 1,
+                    textInputAction: TextInputAction.search,
+                    textAlignVertical: TextAlignVertical.center,
+                    onChanged: cubit.queryChanged,
+                    onSubmitted: cubit.search,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: context.l10n.searchHint,
+                        prefixIcon: const Icon(Icons.search_outlined),
+                        prefixIconColor: theme.primary,
+                        suffixIcon: ValueListenableBuilder<TextEditingValue>(
+                            valueListenable: _controller,
+                            builder: (context, value, _) => value.text.isEmpty
+                                ? const SizedBox.shrink()
+                                : IconButton(tooltip: context.l10n.clearSearch, onPressed: _clear, icon: const Icon(Icons.cancel)),
+                        ),
+                        suffixIconColor: theme.onSurfaceVariant,
+                    ),
+                ),
             ),
-          ),
         );
     }
 }

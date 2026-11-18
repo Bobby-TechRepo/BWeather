@@ -1,0 +1,19 @@
+BWeather vous donne des prévisions claires et rapides pour votre position et les lieux qui comptent pour vous. Gratuit, sans publicité et sans compte.
+
+• Conditions actuelles, prévisions heure par heure et sur 7 jours, avec graphique
+• Comparaison avec les 20 dernières années : « plus chaud que la normale »
+• Pluie minute par minute pour les 2 prochaines heures (facultatif)
+• Radar de pluie des 2 dernières heures
+• Qualité de l'air, indice UV et pollen
+• Lever et coucher du soleil, durée du jour et phase de la lune
+• Conseils du jour : parapluie, tenue, crème solaire, linge, conduite
+• Bulletin du matin, alertes pluie et météo dangereuse
+• Widget pour l'écran d'accueil
+• Ciels animés, thèmes clair et sombre
+• Enregistrez, réorganisez et supprimez vos villes d'un geste
+• Pour téléphones et tablettes
+• En anglais, français, espagnol, chinois, japonais, haoussa, yoruba et igbo
+
+Respect de la vie privée : votre position sert uniquement à obtenir les prévisions. Vos lieux restent sur votre appareil.
+
+Données météo : Open-Meteo (CC BY 4.0). Radar : RainViewer. Cartes © les contributeurs d'OpenStreetMap.

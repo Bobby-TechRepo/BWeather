@@ -1,5 +1,5 @@
-import 'package:bweatherflutter/components/shimmering/shimmer_wraper.dart';
-import 'package:flutter/material.dart';
+import 'package:bweather/components/shimmering/shimmer_wrapper.dart';
+import 'package:material_ui/material_ui.dart';
 
 class LocationItemShimmering extends StatelessWidget{
     const LocationItemShimmering({ super.key });
@@ -9,8 +9,8 @@ class LocationItemShimmering extends StatelessWidget{
       ColorScheme theme = Theme.of(context).colorScheme;
 
     return Container(
-        padding: const EdgeInsets.all(12.0),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: theme.surfaceContainerHigh,
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(24), color: theme.surfaceContainerHigh,
           /*boxShadow: [
                     BoxShadow(color: Colors.grey.withOpacity(0.5), spreadRadius: 1, blurRadius: 3, offset: const Offset(0, 2)),
                 ]*/

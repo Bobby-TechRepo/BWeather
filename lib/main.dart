@@ -1,138 +1,86 @@
 import 'dart:developer';
+import 'dart:io';
 
-import 'package:bweatherflutter/screens/cities.dart';
-import 'package:bweatherflutter/screens/info.dart';
-import 'package:bweatherflutter/screens/not_found.dart';
-import 'package:bweatherflutter/screens/splash.dart';
-import 'package:bweatherflutter/states/cities_cubit.dart';
-import 'package:bweatherflutter/states/forecast/weather_state.dart';
-import 'package:bweatherflutter/states/main_cubit.dart';
-import 'package:bweatherflutter/states/settings_cubit.dart';
-import 'package:bweatherflutter/states/weather_cubit.dart';
-import 'package:bweatherflutter/utils/theme.dart';
-import 'package:bweatherflutter/utils/utils.dart';
-
-import 'package:flutter/material.dart';
+import 'package:bweather/app.dart';
+import 'package:bweather/services/alert_scheduler.dart';
+import 'package:bweather/services/crash_reporting.dart';
+import 'package:bweather/states/settings_cubit.dart';
+import 'package:flutter/foundation.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 
-import 'screens/main.dart';
+/// Logs bloc lifecycle in debug builds only. It deliberately does not print
+/// whole states: the weather state holds hundreds of hourly entries.
+class DebugBlocObserver extends BlocObserver {
+    const DebugBlocObserver();
 
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-class SimpleBlocObserver extends BlocObserver {
-    const SimpleBlocObserver();
-    
-    @override
-    void onCreate(BlocBase<dynamic> bloc) {
-        super.onCreate(bloc);
-        log('onCreate -- bloc: ${bloc.runtimeType}');
-    }
-    
-    @override
-    void onEvent(Bloc<dynamic, dynamic> bloc, Object? event) {
-        super.onEvent(bloc, event);
-        log('onEvent -- bloc: ${bloc.runtimeType}, event: $event');
-    }
-    
     @override
     void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
         super.onChange(bloc, change);
-        log('onChange -- bloc: ${bloc.runtimeType}, change: $change');
+        log('onChange -- ${bloc.runtimeType}: ${change.currentState.runtimeType} -> ${change.nextState.runtimeType}');
     }
-    
-    @override
-    void onTransition(Bloc<dynamic, dynamic> bloc, Transition<dynamic, dynamic> transition) {
-        super.onTransition(bloc, transition);
-        log('onTransition -- bloc: ${bloc.runtimeType}, transition: $transition');
-    }
-    
+
     @override
     void onError(BlocBase<dynamic> bloc, Object error, StackTrace stackTrace) {
-        log('onError -- bloc: ${bloc.runtimeType}, error: $error');
+        log('onError -- ${bloc.runtimeType}', error: error, stackTrace: stackTrace);
         super.onError(bloc, error, stackTrace);
     }
-    
-    @override
-    void onClose(BlocBase<dynamic> bloc) {
-        super.onClose(bloc);
-        log('onClose -- bloc: ${bloc.runtimeType}');
-    }
 }
 
-class App extends StatelessWidget{
-    const App({ super.key });
-
-    @override
-    Widget build(BuildContext context) {
-        return BlocProvider(create: (context) => SettingsCubit(), child: const BWeather());
+Future<HydratedStorageDirectory> _storageDirectory() async {
+    if (kIsWeb) {
+        return HydratedStorageDirectory.web;
     }
+
+    // Application *support* directory: unlike the temp/cache directory the OS
+    // never clears it, so saved cities and settings survive low-storage cleanups.
+    final directory = await getApplicationSupportDirectory();
+    await _migrateFromTemporaryDirectory(directory);
+    return HydratedStorageDirectory(directory.path);
 }
 
-class BWeather extends StatelessWidget {
-    const BWeather({super.key});
+/// Earlier builds stored state in the temporary directory. Copy it over once
+/// so existing installs keep their cities and settings.
+Future<void> _migrateFromTemporaryDirectory(Directory target) async {
+    try {
+        final source = await getTemporaryDirectory();
+        if (!await source.exists()) return;
 
-    @override
-    Widget build(BuildContext context) {
-        TextTheme textTheme = createTextTheme(context, "Noto Sans Mono", "Acme");
+        await for (final entity in source.list()) {
+            final name = entity.uri.pathSegments.last;
+            if (entity is! File || !name.startsWith('hydrated_box') || name.endsWith('.lock')) continue;
 
-        MaterialTheme theme = MaterialTheme(textTheme);
-        SettingsCubit settingsCubit = context.read<SettingsCubit>();
-
-        return BlocBuilder<SettingsCubit, SettingsState>(
-            builder: (context, state) {
-                return MultiBlocProvider(
-                    providers: [
-                        BlocProvider(create: (context) => CitiesCubit()),
-                        BlocProvider(create: (context) => MainCubit()),
-                        BlocProvider(create: (context) => WeatherCubit(settingsCubit)),
-                    ],
-                    child: MaterialApp(title: 'BSoft Weather App',
-                        debugShowCheckedModeBanner: false,
-                        theme: theme.light(),
-                        darkTheme: theme.dark(),
-                        themeMode: state.themeModeValue,
-                        initialRoute: MainScreen.routeName,
-                        builder: (context, child) => ResponsiveBreakpoints.builder(
-                            breakpoints: [
-                                const Breakpoint(start: 0, end: 450, name: MOBILE),
-                                const Breakpoint(start: 451, end: 800, name: TABLET),
-                                const Breakpoint(start: 801, end: double.infinity, name: DESKTOP),
-                            ],
-                            child: child!,
-                        ),
-                        onGenerateRoute: (settings) {
-                            return MaterialPageRoute(builder: (context) {
-                                return BlocBuilder<WeatherCubit, WeatherState>(
-                                    builder: (context, weatherState){
-                                        if(weatherState.location == null){
-                                            return const Splash();
-                                        }
-
-                                        switch (settings.name) {
-                                            case Info.routeName:
-                                                return const Info();
-                                            case MainScreen.routeName:
-                                                return const MainScreen();
-                                            case CitiesScreen.routeName:
-                                                return const CitiesScreen();
-                                            default:
-                                                return const NotFound();
-                                        }
-                                    }
-                                );
-                            });
-                        })
-                );
+            final destination = File('${target.path}${Platform.pathSeparator}$name');
+            if (!await destination.exists()) {
+                await target.create(recursive: true);
+                await entity.copy(destination.path);
             }
-        );
+        }
+    } catch (error) {
+        log('Storage migration skipped', error: error);
     }
 }
 
-void main()async {
+Future<void> main() async {
     WidgetsFlutterBinding.ensureInitialized();
-    HydratedBloc.storage = await HydratedStorage.build(storageDirectory: HydratedStorageDirectory((await getTemporaryDirectory()).path));
-    Bloc.observer = const SimpleBlocObserver();
-    runApp(const App());
+    HydratedBloc.storage = await HydratedStorage.build(storageDirectory: await _storageDirectory());
+    if (kDebugMode) {
+        Bloc.observer = const DebugBlocObserver();
+    }
+    await AlertScheduler.initializeBackground();
+    CrashReporting.enabled = _savedCrashReportChoice();
+    await CrashReporting.run(() => runApp(const App()));
+}
+
+/// The "Send crash reports" setting, read before the cubits exist so a user who
+/// turned it off never sends a report from startup.
+bool _savedCrashReportChoice() {
+    try {
+        final saved = HydratedBloc.storage.read(SettingsCubit.storageKey);
+        if (saved is Map && saved[SettingsState.crashReportsKey] == false) return false;
+    } catch (error) {
+        log('Could not read the crash report setting', error: error);
+    }
+    return true;
 }

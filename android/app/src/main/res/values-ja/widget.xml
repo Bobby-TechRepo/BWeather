@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_description">現在地の今の天気</string>
+    <string name="widget_open_app">BWeather を開いて設定してください</string>
+</resources>

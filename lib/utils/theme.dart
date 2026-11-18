@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import "package:material_ui/material_ui.dart";
 
 class MaterialTheme {
   final TextTheme textTheme;
@@ -345,6 +345,56 @@ class MaterialTheme {
      ),
      scaffoldBackgroundColor: colorScheme.surfaceContainerLowest,
      canvasColor: colorScheme.surface,
+     // Shared component styling so every screen feels like one product.
+     appBarTheme: AppBarTheme(
+       backgroundColor: colorScheme.surfaceContainerLowest,
+       surfaceTintColor: Colors.transparent,
+       scrolledUnderElevation: 0,
+       centerTitle: false,
+       titleTextStyle: textTheme.titleLarge?.copyWith(color: colorScheme.onSurface, fontWeight: FontWeight.w600),
+     ),
+     cardTheme: CardThemeData(
+       elevation: 0,
+       margin: EdgeInsets.zero,
+       color: colorScheme.surfaceContainerLow,
+       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+     ),
+     listTileTheme: const ListTileThemeData(
+       contentPadding: EdgeInsets.symmetric(horizontal: 16),
+       minVerticalPadding: 12,
+     ),
+     dividerTheme: DividerThemeData(color: colorScheme.outlineVariant.withValues(alpha: 0.5), thickness: 1, space: 1),
+     segmentedButtonTheme: SegmentedButtonThemeData(
+       style: ButtonStyle(
+         visualDensity: VisualDensity.compact,
+         textStyle: WidgetStatePropertyAll(textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w600)),
+       ),
+     ),
+     chipTheme: ChipThemeData(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
+     snackBarTheme: SnackBarThemeData(
+       behavior: SnackBarBehavior.floating,
+       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+     ),
+     bottomSheetTheme: BottomSheetThemeData(
+       backgroundColor: colorScheme.surfaceContainerLow,
+       showDragHandle: true,
+       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(28))),
+     ),
+     navigationBarTheme: NavigationBarThemeData(
+       backgroundColor: colorScheme.surfaceContainerLow,
+       indicatorColor: colorScheme.primaryContainer.withValues(alpha: 0.25),
+       labelTextStyle: WidgetStatePropertyAll(textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w600)),
+       iconTheme: WidgetStateProperty.resolveWith((states) => IconThemeData(
+         color: states.contains(WidgetState.selected) ? colorScheme.primary : colorScheme.onSurfaceVariant,
+       )),
+     ),
+     navigationRailTheme: NavigationRailThemeData(
+       backgroundColor: colorScheme.surfaceContainerLowest,
+       indicatorColor: colorScheme.primaryContainer.withValues(alpha: 0.25),
+       selectedIconTheme: IconThemeData(color: colorScheme.primary),
+       unselectedIconTheme: IconThemeData(color: colorScheme.onSurfaceVariant),
+       selectedLabelTextStyle: textTheme.labelMedium?.copyWith(color: colorScheme.primary, fontWeight: FontWeight.w600),
+     ),
   );
 
 

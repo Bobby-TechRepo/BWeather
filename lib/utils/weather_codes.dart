@@ -1,3 +1,5 @@
+import 'package:bweather/l10n/app_localizations.dart';
+
 const Map<int, String> __dayImages = {
   // Adding more codes for a more complete map
   0: 'meteocons--clear-day-fill.svg',             // clear
@@ -42,6 +44,7 @@ const Map<int, String> __nightImages = {
   51: 'meteocons--drizzle-fill.svg',     //'Light drizzle',
   53: 'meteocons--partly-cloudy-night-drizzle-fill.svg',   //'Moderate drizzle',
   55: 'meteocons--extreme-night-drizzle-fill.svg', //'Dense drizzle',
+  56: 'meteocons--overcast-drizzle-fill.svg',  //'Freezing drizzle, light',
   57: 'meteocons--extreme-drizzle-fill.svg',   //'Freezing drizzle, dense',
   61: 'meteocons--partly-cloudy-night-rain-fill.svg',  //'Rain, slight',
   63: 'meteocons--overcast-night-rain-fill.svg', // 'Rain, moderate',
@@ -63,53 +66,50 @@ const Map<int, String> __nightImages = {
   // ... Add more codes as needed
 };
 
-const Map<int, String> __descriptions = {
-  // Adding more codes for a more complete map
-  0: 'Clear Sky', // clear sky
-  1: 'Mainly clear',
-  2: 'Partly cloudy',
-  3: 'Overcast',
-  45: 'Fog',
-  48: 'Rime fog or depositing rime fog',
-  51: 'Light drizzle',
-  53: 'Moderate drizzle',
-  55: 'Dense drizzle',
-  56: 'Freezing drizzle, light',
-  57: 'Freezing drizzle, dense',
-  61: 'Rain, slight',
-  63: 'Rain, moderate',
-  65: 'Rain, heavy',
-  66: 'Freezing rain, slight',
-  67: 'Freezing rain, heavy',
-  71: 'Snow fall, slight',
-  73: 'Snow fall, moderate',
-  75: 'Snow fall, heavy',
-  77: 'Snow grains',
-  80: 'Rain showers, slight',
-  81: 'Rain showers, moderate',
-  82: 'Rain showers, violent',
-  85: 'Snow showers, slight',
-  86: 'Snow showers, heavy',
-  95: 'Thunderstorm, slight or moderate',
-  96: 'Thunderstorm with slight hail',
-  99: 'Thunderstorm with heavy hail',
-  // ... Add more codes as needed
-};
+class WeatherCode {
+    /// Shown for codes the maps don't cover, so an unknown code never breaks the UI.
+    static const fallbackImage = 'meteocons--overcast-fill.svg';
 
-class WeatherCode{
-    final String image, description;
+    final int code;
+    final String image;
 
-    WeatherCode({ required this.image, required this.description });
+    const WeatherCode({ required this.code, required this.image });
 
-    factory WeatherCode.decode({ required int code, required bool isNight }){
-        String image = (isNight ? __nightImages[code] : __dayImages[code]) ?? "";
-
-        return WeatherCode(image: "files/icons/$image", description: __descriptions[code] ?? "unknown");
+    factory WeatherCode.decode({ required int code, required bool isNight }) {
+        final image = (isNight ? __nightImages[code] : __dayImages[code]) ?? __dayImages[code] ?? fallbackImage;
+        return WeatherCode(code: code, image: "files/icons/$image");
     }
-}
 
-extension WeatherCodes on int {
-    WeatherCode weatherCode({ bool isNight = false }) {
-        return WeatherCode.decode(code: this, isNight: isNight);
-    }
+    /// Localized WMO weather description, e.g. "Light rain" / "Pluie faible".
+    String describe(AppLocalizations l10n) => switch (code) {
+        0 => l10n.wmo0,
+        1 => l10n.wmo1,
+        2 => l10n.wmo2,
+        3 => l10n.wmo3,
+        45 => l10n.wmo45,
+        48 => l10n.wmo48,
+        51 => l10n.wmo51,
+        53 => l10n.wmo53,
+        55 => l10n.wmo55,
+        56 => l10n.wmo56,
+        57 => l10n.wmo57,
+        61 => l10n.wmo61,
+        63 => l10n.wmo63,
+        65 => l10n.wmo65,
+        66 => l10n.wmo66,
+        67 => l10n.wmo67,
+        71 => l10n.wmo71,
+        73 => l10n.wmo73,
+        75 => l10n.wmo75,
+        77 => l10n.wmo77,
+        80 => l10n.wmo80,
+        81 => l10n.wmo81,
+        82 => l10n.wmo82,
+        85 => l10n.wmo85,
+        86 => l10n.wmo86,
+        95 => l10n.wmo95,
+        96 => l10n.wmo96,
+        99 => l10n.wmo99,
+        _ => l10n.wmoUnknown,
+    };
 }

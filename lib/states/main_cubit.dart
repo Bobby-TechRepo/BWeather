@@ -1,37 +1,61 @@
 import 'package:equatable/equatable.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MainState extends Equatable{
-    final int index, pageIndex;
-    final bool __showFAO;
-    
-    bool get showFAO => __showFAO && pageIndex == 1;
+/// Top-level destinations. Which ones are visible depends on the layout
+/// (desktop shows the locations list permanently beside the forecast).
+enum AppTab { forecast, locations, trips, settings }
 
-    const MainState({ this.index = 0, this.pageIndex = 0, bool showFAO = true }): __showFAO = showFAO;
+class MainState extends Equatable {
+    final AppTab tab;
 
-    MainState copy({ int? index, int? pageIndex, bool? showFAO }){
-        return MainState(index: index ?? this.index, pageIndex: pageIndex ?? this.pageIndex, showFAO: showFAO ?? __showFAO);
+    /// Key of the place the forecast pager should show (null = first place).
+    final String? selectedPlace;
+
+    /// Bumped every time [selectedPlace] is requested, so selecting the same
+    /// place twice still scrolls the pager back to it.
+    final int selectionRequest;
+
+    /// False while the user scrolls the Locations list down.
+    final bool fabRequested;
+
+    /// The "add city" button only shows on the Locations tab while scrolling up.
+    bool get showFab => fabRequested && tab == AppTab.locations;
+
+    const MainState({ this.tab = AppTab.forecast, this.selectedPlace, this.selectionRequest = 0, this.fabRequested = true });
+
+    MainState copy({ AppTab? tab, String? selectedPlace, int? selectionRequest, bool? fabRequested }) {
+        return MainState(
+            tab: tab ?? this.tab,
+            selectedPlace: selectedPlace ?? this.selectedPlace,
+            selectionRequest: selectionRequest ?? this.selectionRequest,
+            fabRequested: fabRequested ?? this.fabRequested,
+        );
     }
-    
+
     @override
-    List<Object?> get props => [index, pageIndex, __showFAO];
+    List<Object?> get props => [tab, selectedPlace, selectionRequest, fabRequested];
 }
 
+class MainCubit extends Cubit<MainState> {
+    MainCubit(): super(const MainState());
 
-class MainCubit extends Cubit<MainState>{
-    set index(int index){
-        emit(state.copy(index: index, pageIndex: 0, showFAO: false));
+    set tab(AppTab tab) => emit(state.copy(tab: tab, fabRequested: true));
+
+    /// Switches to the forecast tab and pages to the place with [key].
+    void showPlace(String key) {
+        emit(state.copy(tab: AppTab.forecast, selectedPlace: key, selectionRequest: state.selectionRequest + 1));
     }
 
-    set pageIndex(int index){
-        emit(state.copy(pageIndex: index, showFAO: index == 1));
-    }
-
-    set showFAO(bool value){
-        if(state.__showFAO != value){
-            emit(state.copy(showFAO: value));
+    /// Records the page the user swiped to (does not trigger a jump).
+    void placeVisible(String key) {
+        if (state.selectedPlace != key) {
+            emit(state.copy(selectedPlace: key));
         }
     }
 
-    MainCubit(): super(const MainState());
+    set showFab(bool value) {
+        if (state.fabRequested != value) {
+            emit(state.copy(fabRequested: value));
+        }
+    }
 }

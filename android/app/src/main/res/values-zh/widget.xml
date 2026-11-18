@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_description">你所在位置的当前天气</string>
+    <string name="widget_open_app">打开 BWeather 进行设置</string>
+</resources>
